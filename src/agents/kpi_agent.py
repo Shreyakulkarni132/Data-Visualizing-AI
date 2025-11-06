@@ -39,7 +39,7 @@ class KPIIdentificationAgent:
         """Uses RandomForest to rank features based on importance for predicting target."""
         target = target.lower()
         if target not in self.df.columns:
-            print(f"⚠️ Target column '{target}' not found. Skipping ML KPI detection.")
+            print(f" Target column '{target}' not found. Skipping ML KPI detection.")
             return self.kpis
 
         features = self.df.drop(columns=[target])
@@ -71,5 +71,5 @@ class KPIIdentificationAgent:
 
         # Merge both results
         self.kpis.update(rag_info)
-        print("✅ KPI identification complete.")
+        print(" KPI identification complete.")
         return self.kpis

@@ -9,7 +9,7 @@ from agents.visualization_agent import VisualizationAgent
 st.set_page_config(page_title="Automated Analytics System", layout="wide")
 st.title("🤖 Automated Data Visualization & Analytics System")
 
-uploaded_file = st.file_uploader("📂 Upload a dataset (CSV format)", type=["csv"])
+uploaded_file = st.file_uploader("Upload a dataset (CSV format)", type=["csv"])
 
 if uploaded_file:
     # Try UTF-8 first; fall back to Windows-1252 automatically
@@ -18,10 +18,10 @@ if uploaded_file:
     except UnicodeDecodeError:
         df = pd.read_csv(uploaded_file, encoding="latin1")
 
-    st.success("✅ Dataset uploaded successfully!")
+    st.success("Dataset uploaded successfully!")
 
     # Raw Data Display
-    st.subheader("🧾 Raw Data Preview")
+    st.subheader("Raw Data Preview")
     st.dataframe(df.head())
 
     # Step 1: Data Cleaning
@@ -36,15 +36,15 @@ if uploaded_file:
     st.success("Cleaned data saved in 'data/processed/cleaned_data.csv'")
 
     # Step 2: KPI Identification
-    st.header("📈 Step 2: KPI Identification Agent (ML + RAG)")
+    st.header("Step 2: KPI Identification Agent (ML + RAG)")
     kpi_agent = KPIIdentificationAgent(df_cleaned)
     kpis = kpi_agent.run(target="sales" if "sales" in df_cleaned.columns else df_cleaned.columns[-1])
     st.json(kpis)
 
     # Step 3: Visualization
-    st.header("📊 Step 3: Visualization Agent")
+    st.header("Step 3: Visualization Agent")
     viz = VisualizationAgent(df_cleaned)
     viz.auto_visualize()
 
 else:
-    st.info("👆 Upload a CSV file to start the automated analytics process.")
+    st.info("Upload a CSV file to start the automated analytics process.")

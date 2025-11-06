@@ -11,7 +11,7 @@ class VisualizationAgent:
 
     def auto_visualize(self):
         """Dynamically generates charts for numeric and categorical columns."""
-        st.write("### 📊 Auto-Generated Visualizations")
+        st.write("###  Auto-Generated Visualizations")
 
         numeric_cols = [col for col in self.df.columns if self.df[col].dtype in ["int64", "float64"]]
         cat_cols = [col for col in self.df.columns if self.df[col].dtype == "object"]
