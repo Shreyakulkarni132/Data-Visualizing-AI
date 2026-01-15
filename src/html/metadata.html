@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dataset Context</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      width: 450px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    textarea, select {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Tell us about your dataset</h2>
+
+  <label>What is this dataset about?</label>
+  <textarea id="datasetDesc" rows="3" placeholder="Short description..."></textarea>
+
+  <label style="margin-top:15px; display:block;">Which domain best fits this dataset?</label>
+  <select id="datasetDomain">
+    <option>Business / Sales</option>
+    <option>Marketing</option>
+    <option>Finance</option>
+    <option>Healthcare</option>
+    <option>Operations</option>
+    <option>Education</option>
+    <option>Scientific / Research</option>
+    <option>Other</option>
+  </select>
+
+  <button onclick="submitMetadata()">Continue</button>
+</div>
+
+<script>
+async function submitMetadata() {
+  const description = document.getElementById("datasetDesc").value.trim();
+  const domain = document.getElementById("datasetDomain").value;
+
+  const metadata = { description, domain };
+  localStorage.setItem("datasetMetadata", JSON.stringify(metadata));
+
+  console.log("📝 Dataset metadata saved:", metadata);
+
+  // 🔹 Gather everything LLM needs
+  const payload = {
+    dataset_metadata: JSON.parse(localStorage.getItem("datasetAnalysis")),
+    sample_rows: JSON.parse(localStorage.getItem("datasetSampleRows")),
+    user_context: metadata
+  };
+
+  try {
+    const response = await fetch("http://localhost:8000/llm-review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error("LLM review request failed");
+    }
+
+    const llmReview = await response.json();
+
+    // ✅ Store LLM-generated review
+    localStorage.setItem("llmReview", JSON.stringify(llmReview));
+
+    console.log("🤖 LLM Review received:", llmReview);
+
+    // 👉 Move to review panel
+    window.location.href = "review.html";
+
+  } catch (err) {
+    console.error("❌ Error during LLM review:", err);
+    alert("Failed to generate data review. Please try again.");
+  }
+}
+
+// Optional sanity check
+console.log("📦 Loaded dataset analysis:",
+  JSON.parse(localStorage.getItem("datasetAnalysis"))
+);
+</script>
+
+</body>
+</html>
