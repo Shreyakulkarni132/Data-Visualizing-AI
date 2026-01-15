@@ -171,7 +171,6 @@ if (review && review.dataset_level_steps && review.dataset_level_steps.length) {
 ================================ */
 async function processSelected() {
 
-  // ✅ ADD THIS BLOCK AT THE VERY TOP
   const uploaded = localStorage.getItem("dataset_uploaded");
 
   if (uploaded !== "true") {
@@ -222,9 +221,12 @@ async function processSelected() {
       throw new Error("Cleaning request failed");
     }
 
-    console.log("✅ CLEANING RESULT: File has been saved as csv",);
+    console.log("✅ CLEANING RESULT: File has been saved as CSV");
 
-    alert("✅ Data cleaning completed successfully. Check console for details.");
+    alert("✅ Data cleaning completed successfully. Moving to KPI analysis...");
+
+    // 🔁 Redirect to KPI UI
+    window.location.href = "kpi_ui.html";
 
   } catch (err) {
     console.error("❌ Cleaning failed:", err);

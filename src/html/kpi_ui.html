@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KPI Identification Result</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+button:hover {
+    background: #45a049;
+}
+#output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    max-height: 600px;
+    overflow-y: auto;
+}
+.error {
+    color: red;
+    font-weight: bold;
+}
+.loading {
+    color: blue;
+    font-weight: bold;
+}
+#nextBtn {
+    display: none;   /* Hidden initially */
+}
+</style>
+</head>
+<body>
+
+<h1>📊 KPI Identification Agent</h1>
+
+<div style="text-align:center;">
+    <button onclick="runKPI()">Run KPI Agent</button>
+    <button id="nextBtn" onclick="goToDashboard()">Continue → Dashboard</button>
+</div>
+
+<div id="output"></div>
+
+<script>
+function runKPI() {
+    const output = document.getElementById("output");
+    const nextBtn = document.getElementById("nextBtn");
+    nextBtn.style.display = "none";  // hide until success
+
+    output.innerHTML = "<div class='loading'>Running KPI agent, please wait...</div>";
+
+    fetch("http://localhost:8002/identify-kpis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ run: true })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("Full API Response:", data);
+
+        if (data.status === "success" && data.kpi_output) {
+            output.innerHTML = `
+                <h3>Identified KPIs:</h3>
+                <pre>${data.kpi_output}</pre>
+            `;
+
+            // 🔐 Store KPI output so dashboard.html can reuse it if required
+            localStorage.setItem("kpi_result", JSON.stringify(data));
+
+            // Show Continue button
+            nextBtn.style.display = "inline-block";
+        } 
+        else if (data.status === "error") {
+            output.innerHTML = `<div class="error">Error: ${data.message}</div>`;
+        } 
+        else {
+            output.innerHTML = `
+                <div class="error">
+                Unexpected API response:<br>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        output.innerHTML = "<div class='error'>Failed to connect to KPI Agent API</div>";
+    });
+}
+
+function goToDashboard() {
+    // Redirect to dashboard visualization page
+    window.location.href = "dashboard.html";
+}
+</script>
+
+</body>
+</html>

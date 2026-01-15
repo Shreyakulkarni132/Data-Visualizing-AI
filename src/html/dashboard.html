@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Auto KPI Dashboard</title>
+<style>
+body {
+  font-family: Arial;
+  background:#f4f6f9;
+  padding:20px;
+}
+h2 {
+  text-align:center;
+}
+button {
+  padding:10px 20px;
+  background:#1976d2;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+button:hover {
+  background:#0f5aa0;
+}
+#charts img {
+  width:400px;
+  margin:10px;
+  border:1px solid #ccc;
+}
+</style>
+</head>
+<body>
+
+<h2>📊 Auto Dashboard Generator</h2>
+<div style="text-align:center;">
+  <button onclick="runDashboard()">Generate Dashboard</button>
+</div>
+
+<div id="charts"></div>
+
+<script>
+// ------------------------------
+// Convert KPI text → structured JSON
+// ------------------------------
+function parseKPIText(text) {
+  text = text.replace(/```plaintext|```/g, "").trim();
+  const kpis = [];
+  const blocks = text.split(/KPI \d+:/).slice(1);
+
+  blocks.forEach(block => {
+    const kpi = {};
+    const lines = block.trim().split("\n");
+
+    lines.forEach(line => {
+      if (line.includes(":")) {
+        const [key, ...rest] = line.split(":");
+        const value = rest.join(":").trim();
+        const normalizedKey = key.trim().toLowerCase().replace(/ /g, "_");
+        kpi[normalizedKey] = value;
+      }
+    });
+
+    kpis.push({
+      name: kpi.name,
+      columns: kpi.columns,
+      suggested_chart: kpi.suggested_chart
+    });
+  });
+
+  return kpis;
+}
+
+// ------------------------------
+// Full Dashboard Flow
+// ------------------------------
+function runDashboard() {
+  fetch("http://127.0.0.1:8002/identify-kpis", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ run: true })
+  })
+  .then(res => res.json())
+  .then(kpiData => {
+    console.log("KPI DATA:", kpiData);
+
+    const structuredKPIs = parseKPIText(kpiData.kpi_output);
+    console.log("STRUCTURED KPIs:", structuredKPIs);
+
+    return fetch("http://127.0.0.1:8003/generate-charts", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ kpis: structuredKPIs })
+    });
+  })
+  .then(res => res.json())
+  .then(chartData => {
+    console.log("CHART DATA:", chartData);
+
+    const div = document.getElementById("charts");
+    div.innerHTML = "";
+
+    if (!chartData.images || chartData.images.length === 0) {
+      div.innerHTML = "<p>No charts generated.</p>";
+      return;
+    }
+
+    chartData.images.forEach(img => {
+      div.innerHTML += `<img src="${img}">`;
+    });
+  })
+  .catch(err => {
+    alert("Error generating dashboard. Check console.");
+    console.error(err);
+  });
+}
+</script>
+
+</body>
+</html>
