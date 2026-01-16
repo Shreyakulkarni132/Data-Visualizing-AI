@@ -36,8 +36,8 @@ load_dotenv()
 # Paths
 # --------------------------------------------------
 CLEANED_DATASET_DIR = "cleaned_datasets"
-KPI_RAG_CSV = "C:\\allenvs\\Agents\\Data-Visualizing-AI\\src\\Rag_data\\BE project KPI data - Sheet1.csv"
-KPI_VECTOR_DIR = "kpi_rag_index"   # 📁 persistent embeddings directory
+KPI_RAG_CSV = r"C:\allenvs\Agents\Data-Visualizing-AI\src\Rag_data\BE project KPI data - Sheet1.csv"
+KPI_VECTOR_DIR = "kpi_rag_index"
 
 
 # --------------------------------------------------
@@ -68,6 +68,22 @@ def load_latest_dataframe() -> Optional[pd.DataFrame]:
 
 
 # --------------------------------------------------
+# Column Semantic Detection
+# --------------------------------------------------
+def detect_column_type(series: pd.Series) -> str:
+    if pd.api.types.is_numeric_dtype(series):
+        return "numerical"
+    elif pd.api.types.is_datetime64_any_dtype(series):
+        return "datetime"
+    elif series.nunique() < 20:
+        return "categorical"
+    elif pd.api.types.is_bool_dtype(series):
+        return "boolean"
+    else:
+        return "text"
+
+
+# --------------------------------------------------
 # TOOL 1: Dataset Summary Tool
 # --------------------------------------------------
 def load_data_summary(input_text: str = "") -> str:
@@ -83,6 +99,7 @@ def load_data_summary(input_text: str = "") -> str:
         for col in df.columns:
             column_info[col] = {
                 "dtype": df[col].dtype.name,
+                "semantic_type": detect_column_type(df[col]),
                 "null_count": int(df[col].isnull().sum()),
                 "unique_values": int(df[col].nunique())
             }
@@ -97,11 +114,11 @@ def load_data_summary(input_text: str = "") -> str:
             f"File Used: {get_latest_cleaned_csv()}\n"
             f"Total Rows: {len(df)}\n"
             f"Total Columns: {len(df.columns)}\n\n"
-            f"=== COLUMN DETAILS ===\n"
+            f"=== COLUMN DETAILS (With Semantic Types) ===\n"
             f"{json.dumps(column_info, indent=2)}\n\n"
             f"=== SAMPLE DATA (First 5 Rows) ===\n"
             f"{sample_data_md}\n\n"
-            f"You can now identify KPIs based on this dataset."
+            f"Use this dataset to generate KPIs using single, dual and multi-column logic."
         )
         return summary
 
@@ -112,10 +129,7 @@ def load_data_summary(input_text: str = "") -> str:
 DataSummaryTool = Tool(
     name="get_data_summary",
     func=load_data_summary,
-    description=(
-        "Gets a summary of the latest cleaned dataset CSV. "
-        "Use this FIRST before identifying KPIs."
-    )
+    description="Gets a detailed summary of the latest cleaned dataset. Use this FIRST."
 )
 
 
@@ -125,7 +139,6 @@ DataSummaryTool = Tool(
 def build_or_load_kpi_vectorstore():
     embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
 
-    # Load if already exists
     if os.path.exists(KPI_VECTOR_DIR):
         print("🔄 Loading existing KPI embeddings from disk...")
         return FAISS.load_local(
@@ -134,7 +147,6 @@ def build_or_load_kpi_vectorstore():
             allow_dangerous_deserialization=True
         )
 
-    # Else create and save
     print("🧠 Building KPI embeddings for the first time...")
     df = pd.read_csv(KPI_RAG_CSV)
 
@@ -151,8 +163,6 @@ def build_or_load_kpi_vectorstore():
         documents.append(Document(page_content=text))
 
     vectorstore = FAISS.from_documents(documents, embeddings)
-
-    # Persist to disk
     vectorstore.save_local(KPI_VECTOR_DIR)
     print(f"✅ KPI embeddings saved to directory: {KPI_VECTOR_DIR}")
 
@@ -163,20 +173,11 @@ kpi_vectorstore = build_or_load_kpi_vectorstore()
 
 
 # --------------------------------------------------
-# TOOL 2: RAG Retrieval Tool
+# TOOL 2: KPI RAG Retrieval
 # --------------------------------------------------
 def retrieve_kpi_knowledge(domain=None, columns=None, query=None):
-    """
-    CrewAI sends arguments as keyword parameters.
-    We support:
-    - domain + columns
-    - OR a raw query string
-    """
-
-    # Build search query
     if domain or columns:
         domain = domain or ""
-        columns = columns or []
         if isinstance(columns, list):
             columns_text = ", ".join(columns)
         else:
@@ -185,35 +186,27 @@ def retrieve_kpi_knowledge(domain=None, columns=None, query=None):
         search_query = (
             f"Domain: {domain}. "
             f"Columns: {columns_text}. "
-            f"Suggest similar KPI patterns."
+            f"Suggest KPI patterns using single, dual, and multi-column strategies."
         )
-
     elif query:
         search_query = query
-
     else:
         search_query = "General KPI patterns"
 
-    # Run vector search
     results = kpi_vectorstore.similarity_search(search_query, k=5)
-
     context = "\n\n".join([doc.page_content for doc in results])
 
     return (
         "=== KPI KNOWLEDGE BASE CONTEXT (RAG) ===\n"
-        "The following KPI examples from historical datasets can guide KPI selection:\n\n"
+        "Use these examples as inspiration:\n\n"
         f"{context}"
     )
-
 
 
 KPIKnowledgeTool = Tool(
     name="retrieve_kpi_knowledge",
     func=retrieve_kpi_knowledge,
-    description=(
-        "Retrieves relevant KPI examples from the KPI knowledge base CSV using semantic search. "
-        "Use this AFTER dataset summary."
-    )
+    description="Retrieves relevant KPI patterns from the KPI knowledge base."
 )
 
 
@@ -228,25 +221,21 @@ llm = ChatOpenAI(
 
 
 # --------------------------------------------------
-# KPI IDENTIFICATION AGENT (with RAG)
+# KPI IDENTIFICATION AGENT
 # --------------------------------------------------
 kpi_identification_agent = Agent(
-    role="Expert KPI Analyst",
+    role="Strategic KPI Designer",
     goal=(
-        "Analyze the dataset using get_data_summary and enrich KPI identification "
-        "using retrieve_kpi_knowledge (RAG)."
+        "Design analytically strong, multi-dimensional KPIs that combine multiple "
+        "columns and produce executive-grade dashboard insights. "
+        "Avoid shallow single-column KPIs unless strategically justified."
     ),
     verbose=True,
     memory=True,
     backstory=(
-        "You are a senior data analyst.\n\n"
-        "Workflow:\n"
-        "1. FIRST: Call get_data_summary\n"
-        "2. SECOND: Call retrieve_kpi_knowledge using dataset domain + column names\n"
-        "3. ANALYZE dataset + retrieved KPI patterns\n"
-        "4. IDENTIFY 5–8 KPIs\n"
-        "5. OUTPUT strictly in required format\n\n"
-        "IMPORTANT: Always use BOTH tools."
+        "You are not a metric reporter. You are a KPI architect.\n"
+        "You design KPIs that show relationships, efficiency, behavior patterns, and business performance.\n"
+        "Your KPIs must feel like insights, not statistics."
     ),
     tools=[DataSummaryTool, KPIKnowledgeTool],
     llm=llm,
@@ -254,28 +243,65 @@ kpi_identification_agent = Agent(
 )
 
 
+
+
 # --------------------------------------------------
 # KPI TASK
 # --------------------------------------------------
 kpi_identification_task = Task(
     description=(
-        "STEP 1: Use get_data_summary to retrieve dataset info.\n"
-        "STEP 2: Use retrieve_kpi_knowledge with domain + column names.\n"
-        "STEP 3: Combine dataset info and KPI examples.\n"
-        "STEP 4: Identify 5–8 KPIs.\n"
-        "STEP 5: Output strictly in required format."
+        "Optional user context (weak hint):\n"
+        "- Dataset Description: {user_dataset_description}\n"
+        "- Dataset Domain: {user_dataset_domain}\n\n"
+
+        "You MUST generate analytically rich KPIs.\n\n"
+
+        "Mandatory KPI composition:\n"
+        "• At least 2 KPIs using a SINGLE column\n"
+        "• At least 3 KPIs using DUAL columns (ratios, comparisons, dependencies)\n"
+        "• At least 3 KPIs using MULTI columns (3 or more columns, composite insights)\n\n"
+
+        "Avoid trivial KPIs like simple counts or averages unless they are part of a deeper business story.\n\n"
+
+        "Each KPI must:\n"
+        "• Combine multiple signals where possible\n"
+        "• Reflect operational or business decision value\n"
+        "• Be something a dashboard user would act on\n\n"
+
+        "Charts:\n"
+        "• Mix of advanced + basic types:\n"
+        "  - Line, Bar, Heatmap, Funnel, Stacked Bar, Radar, Area, Boxplot\n"
+        "• Titles must be:\n"
+        "  - Professional\n"
+        "  - 4–7 words\n"
+        "  - Clearly describe the business meaning\n"
+        "Examples:\n"
+        "  - 'Booking Cancellation Behavior Over Time'\n"
+        "  - 'Revenue Performance by Market Segment'\n"
+        "  - 'Guest Stay Pattern Analysis'\n"
+        "  - 'Booking Lead Time Distribution'\n\n"
+
+        "Process:\n"
+        "STEP 1: Call get_data_summary\n"
+        "STEP 2: Infer dataset domain\n"
+        "STEP 3: Call retrieve_kpi_knowledge\n"
+        "STEP 4: Generate 8–12 KPIs meeting the composition rules\n"
+        "STEP 5: Output ONLY in the required format\n"
     ),
+
     expected_output=(
-        "KPI 1:\n"
-        "  Name: <KPI Name>\n"
-        "  Columns: <Column Names>\n"
-        "  Data Type: <Data Type>\n"
-        "  Reasoning: <Why this KPI matters>\n"
-        "  Suggested Chart: <Chart Type>\n\n"
-        "[Repeat for all KPIs]"
+        "KPI <n>:\n"
+        "  Name: <Descriptive Professional KPI Name>\n"
+        "  Columns: <Column names used>\n"
+        "  Reasoning: <Explain business or operational value clearly>\n"
+        "  Suggested Chart:\n"
+        "    - Chart Type: <Advanced or basic chart>\n"
+        "    - Chart Title: <Professional descriptive title (4–7 words)>\n\n"
     ),
+
     agent=kpi_identification_agent
 )
+
 
 
 # --------------------------------------------------
@@ -291,7 +317,7 @@ crew = Crew(
 # --------------------------------------------------
 # FASTAPI
 # --------------------------------------------------
-app = FastAPI(title="RAG Powered KPI Identification Agent")
+app = FastAPI(title="Advanced RAG Powered KPI Identification Agent")
 
 app.add_middleware(
     CORSMiddleware,
@@ -302,13 +328,19 @@ app.add_middleware(
 
 
 class KPIRequest(BaseModel):
-    run: bool = True
+    dataset_description: Optional[str] = None
+    dataset_domain: Optional[str] = None
 
 
 @app.post("/identify-kpis")
 def identify_kpis(request: KPIRequest):
     try:
-        result = crew.kickoff()
+        inputs = {
+            "user_dataset_description": request.dataset_description or "",
+            "user_dataset_domain": request.dataset_domain or ""
+        }
+
+        result = crew.kickoff(inputs=inputs)
         result_str = str(result)
 
         return {

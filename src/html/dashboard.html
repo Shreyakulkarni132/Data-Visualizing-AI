@@ -33,6 +33,28 @@ button:hover {
   display: none;
 }
 
+/* Loader */
+#loader {
+  display: none;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #ddd;
+  border-top: 6px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 #charts {
   display:flex;
   flex-wrap:wrap;
@@ -48,13 +70,20 @@ button:hover {
 }
 </style>
 </head>
+
 <body>
 
 <h2>📊 Auto Dashboard Generator</h2>
 
 <div class="controls">
-  <button onclick="runDashboard()">Generate Dashboard</button>
+  <button id="generateBtn" onclick="runDashboard()">Generate Dashboard</button>
   <button id="downloadBtn" onclick="downloadPDF()">Download Dashboard as PDF</button>
+</div>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="spinner"></div>
+  <p>Generating dashboard, please wait...</p>
 </div>
 
 <div id="charts"></div>
@@ -69,80 +98,97 @@ function parseKPIText(text) {
   const blocks = text.split(/KPI \d+:/).slice(1);
 
   blocks.forEach(block => {
-    const kpi = {};
+    let name = "";
+    let columns = "";
+    let chartType = "";
+
     const lines = block.trim().split("\n");
 
     lines.forEach(line => {
-      if (line.includes(":")) {
-        const [key, ...rest] = line.split(":");
-        const value = rest.join(":").trim();
-        const normalizedKey = key.trim().toLowerCase().replace(/ /g, "_");
-        kpi[normalizedKey] = value;
+      line = line.trim();
+
+      if (line.startsWith("Name:")) {
+        name = line.replace("Name:", "").trim();
+      }
+      else if (line.startsWith("Columns:")) {
+        columns = line.replace("Columns:", "").trim();
+      }
+      else if (line.includes("Chart Type:")) {
+        chartType = line.replace("- Chart Type:", "").trim();
       }
     });
 
     kpis.push({
-      name: kpi.name,
-      columns: kpi.columns,
-      suggested_chart: kpi.suggested_chart
+      name: name,
+      columns: columns,
+      suggested_chart: chartType
     });
   });
 
   return kpis;
 }
 
+
 // ------------------------------
 // Generate Dashboard Flow
 // ------------------------------
 function runDashboard() {
-  // Hide download button until charts are ready
-  document.getElementById("downloadBtn").style.display = "none";
+  const generateBtn = document.getElementById("generateBtn");
+  const downloadBtn = document.getElementById("downloadBtn");
+  const loader = document.getElementById("loader");
+  const chartsDiv = document.getElementById("charts");
 
-  fetch("http://127.0.0.1:8002/identify-kpis", {
+  // Hide buttons and show loader
+  generateBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+  loader.style.display = "block";
+  chartsDiv.innerHTML = "";
+
+  const storedKPIs = localStorage.getItem("structured_kpis");
+
+  if (!storedKPIs) {
+    alert("No KPIs found. Please run KPI Agent first.");
+    loader.style.display = "none";
+    generateBtn.style.display = "inline-block";
+    return;
+  }
+
+  const structuredKPIs = JSON.parse(storedKPIs);
+  console.log("📊 Using Stored KPIs:", structuredKPIs);
+
+  fetch("http://127.0.0.1:8003/generate-charts", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ run: true })
-  })
-  .then(res => res.json())
-  .then(kpiData => {
-    console.log("KPI DATA:", kpiData);
-
-    const structuredKPIs = parseKPIText(kpiData.kpi_output);
-    console.log("STRUCTURED KPIs:", structuredKPIs);
-
-    return fetch("http://127.0.0.1:8003/generate-charts", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ kpis: structuredKPIs })
-    });
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kpis: structuredKPIs })
   })
   .then(res => res.json())
   .then(chartData => {
-    console.log("CHART DATA:", chartData);
-
-    const div = document.getElementById("charts");
-    div.innerHTML = "";
+    loader.style.display = "none";
 
     if (!chartData.images || chartData.images.length === 0) {
-      div.innerHTML = "<p>No charts generated.</p>";
+      chartsDiv.innerHTML = "<p>No charts generated.</p>";
+      generateBtn.style.display = "inline-block";
       return;
     }
 
-    // Show images
     chartData.images.forEach(img => {
       const imageTag = document.createElement("img");
       imageTag.src = img;
-      div.appendChild(imageTag);
+      chartsDiv.appendChild(imageTag);
     });
 
-    // ✅ Now that dashboard is visible, show Download button
-    document.getElementById("downloadBtn").style.display = "inline-block";
+    // Show download button after charts load
+    downloadBtn.style.display = "inline-block";
   })
   .catch(err => {
-    alert("Error generating dashboard. Check console.");
     console.error(err);
+    alert("Chart generation failed");
+
+    loader.style.display = "none";
+    generateBtn.style.display = "inline-block";
   });
 }
+
 
 // ------------------------------
 // Download Dashboard as PDF
