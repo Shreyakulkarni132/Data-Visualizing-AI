@@ -11,28 +11,50 @@ body {
 h2 {
   text-align:center;
 }
+.controls {
+  text-align:center;
+  margin-bottom:20px;
+}
 button {
   padding:10px 20px;
   background:#1976d2;
   color:white;
   border:none;
   cursor:pointer;
+  margin:5px;
+  border-radius:4px;
 }
 button:hover {
   background:#0f5aa0;
+}
+
+/* Hide download button initially */
+#downloadBtn {
+  display: none;
+}
+
+#charts {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 #charts img {
   width:400px;
   margin:10px;
   border:1px solid #ccc;
+  border-radius:4px;
+  background:white;
+  padding:5px;
 }
 </style>
 </head>
 <body>
 
 <h2>📊 Auto Dashboard Generator</h2>
-<div style="text-align:center;">
+
+<div class="controls">
   <button onclick="runDashboard()">Generate Dashboard</button>
+  <button id="downloadBtn" onclick="downloadPDF()">Download Dashboard as PDF</button>
 </div>
 
 <div id="charts"></div>
@@ -70,9 +92,12 @@ function parseKPIText(text) {
 }
 
 // ------------------------------
-// Full Dashboard Flow
+// Generate Dashboard Flow
 // ------------------------------
 function runDashboard() {
+  // Hide download button until charts are ready
+  document.getElementById("downloadBtn").style.display = "none";
+
   fetch("http://127.0.0.1:8002/identify-kpis", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -103,14 +128,27 @@ function runDashboard() {
       return;
     }
 
+    // Show images
     chartData.images.forEach(img => {
-      div.innerHTML += `<img src="${img}">`;
+      const imageTag = document.createElement("img");
+      imageTag.src = img;
+      div.appendChild(imageTag);
     });
+
+    // ✅ Now that dashboard is visible, show Download button
+    document.getElementById("downloadBtn").style.display = "inline-block";
   })
   .catch(err => {
     alert("Error generating dashboard. Check console.");
     console.error(err);
   });
+}
+
+// ------------------------------
+// Download Dashboard as PDF
+// ------------------------------
+function downloadPDF() {
+  window.open("http://127.0.0.1:8003/download-dashboard", "_blank");
 }
 </script>
 
