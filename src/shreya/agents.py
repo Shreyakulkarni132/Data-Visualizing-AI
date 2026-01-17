@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from crewai import Agent
 from langchain_openai import ChatOpenAI
 from tools import DataSummaryTool, FullDatasetTool
+from langchain.chat_models import ChatOpenAI
+import os
+
 
 # Fix for "no current event loop" error
 try:
@@ -16,21 +19,20 @@ nest_asyncio.apply()
 
 load_dotenv()
 
+
 llm = ChatOpenAI(
-    model="gpt-4o-mini",
+    model="llama-3.1-8b-instant",
     temperature=0.3,
-    openai_api_key=os.getenv("OPENAI_API_KEY")
+    openai_api_key=os.getenv("GROQ_API_KEY"),
+    openai_api_base="https://api.groq.com/openai/v1"
 )
 
-
-"""
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    verbose=True,
-    temperature=0.3,  # Slightly increased for more creative KPI identification
-    google_api_key=os.getenv("GEMINI_API_KEY")
-)
-"""
+# llm = ChatGoogleGenerativeAI(
+#     model="gemini-2.5-flash",
+#     verbose=True,
+#     temperature=0.3,  # Slightly increased for more creative KPI identification
+#     google_api_key=os.getenv("GEMINI_API_KEY")
+# )
 
 kpi_identification_agent = Agent(
     role="Expert KPI Analyst",
