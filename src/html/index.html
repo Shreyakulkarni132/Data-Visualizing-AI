@@ -58,19 +58,18 @@ async function uploadFileToBackend(file) {
 
   console.log("✅ Dataset uploaded. ID:", data.dataset_id);
 
+  // Backend is the ONLY authority for metadata
   localStorage.setItem("dataset_id", data.dataset_id);
-  localStorage.setItem("dataset_uploaded", "true"); // ✅ ADD THIS
-
+  localStorage.setItem("dataset_uploaded", "true");
 }
 
 document.getElementById("fileInput").addEventListener("change", async function (e) {
   const file = e.target.files[0];
   if (!file) return;
 
-  await uploadFileToBackend(file);   // ✅ ADD THIS
+  await uploadFileToBackend(file);
 
-  // existing PapaParse logic stays SAME
-
+  // PapaParse is used ONLY for preview + sample rows
   Papa.parse(file, {
     header: true,
     skipEmptyLines: true,
@@ -80,16 +79,24 @@ document.getElementById("fileInput").addEventListener("change", async function (
 
       const analysis = analyzeDataset(data, columns);
 
-      console.log("📊 AUTO DATASET ANALYSIS");
+      console.log("📊 UI ONLY DATASET ANALYSIS (Not metadata)");
       console.log(analysis);
 
-      // ✅ ADD THIS (store sample rows for LLM)
-        localStorage.setItem(
-            "datasetSampleRows",
-            JSON.stringify(data.slice(0, 30)) // first 30 rows
-        );
+      // ✔ Used by LLM as example rows
+      localStorage.setItem(
+        "datasetSampleRows",
+        JSON.stringify(data.slice(0, 30))
+      );
 
-      localStorage.setItem("datasetAnalysis", JSON.stringify(analysis));
+      // ✔ Used only for UI dashboards / charts
+      localStorage.setItem(
+        "datasetAnalysis",
+        JSON.stringify(analysis)
+      );
+
+      // ❌ This is NOT sent as dataset_metadata anymore
+      console.log("⚠ datasetAnalysis is UI-only. Backend provides real metadata.");
+
       window.location.href = "metadata.html";
     }
   });

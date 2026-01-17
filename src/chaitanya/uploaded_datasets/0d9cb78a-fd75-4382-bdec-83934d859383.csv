@@ -1,0 +1,551 @@
+Customer_ID,Age,Gender,Signup_Date,Last_Login,Country,Monthly_Spend,Subscription_Type,Churned,Support_Tickets
+CUST102,27,,20-10-2023 00:00,,,1791.21,,,five
+CUST725,,Male,10-03-2022 00:00,,IN,,Gold,Y,
+CUST728,,,12-05-2023,,,,Gold,No,five
+CUST302,,,2023-13-40,22-03-2024 00:00,UK,-99,,No,five
+CUST802,unknown,M,,not_logged,IN,,Premium,,17
+CUST127,,Female,12-05-2023,,,4612.87,Gold,,15
+CUST169,unknown,Female,,05-05-2024 00:00,,,,,
+CUST741,61,,,,IN,-99,Basic,Y,
+CUST389,45,,12-05-2023,,USA,zero,Basic,N,five
+CUST256,unknown,Male,06-11-2023 00:00,not_logged,,,Premium,Yes,
+CUST386,unknown,F,,14-07-2024 00:00,U.S.,,Gold,No,9
+CUST727,,,2023-13-40,not_logged,UK,,Premium,Yes,five
+CUST452,62,Female,,,UK,-99,Basic,No,
+CUST395,,F,2023-13-40,,IN,-99,Basic,Yes,
+CUST252,,Male,2023-13-40,not_logged,,831.37,Premium,,five
+CUST994,unknown,M,,not_logged,India,zero,Gold,N,13
+CUST740,57,,,07-05-2023 00:00,,,Basic,Y,
+CUST215,,Male,12-05-2023,,UK,-99,Basic,Yes,15
+CUST188,unknown,,2023-13-40,24-06-2024 00:00,India,2630.11,,,
+CUST955,,Male,,09-01-2023 00:00,IN,,,,2
+,,M,,not_logged,,zero,Basic,,12
+CUST102,,,,,India,-99,Basic,N,five
+CUST657,,Male,2023-13-40,,USA,656.61,,Yes,five
+CUST285,unknown,F,12-05-2023,26-10-2023 00:00,,4055.41,,Y,4
+CUST505,,,,not_logged,UK,3744.62,,N,
+CUST262,,Female,12-05-2023,,IN,,,No,five
+CUST892,51,Female,,02-08-2023 00:00,,-99,Premium,Yes,
+CUST192,55,,2023-13-40,16-11-2023 00:00,U.S.,zero,Premium,,
+CUST242,,Male,,23-08-2024 00:00,IN,-99,Gold,No,five
+CUST662,25,M,2023-13-40,27-06-2023 00:00,India,,Basic,Y,five
+CUST486,42,F,12-05-2023,,IN,-99,Basic,N,
+CUST330,,,2023-13-40,,USA,,Premium,Yes,five
+CUST364,51,M,,not_logged,,zero,Gold,N,
+CUST950,49,,,not_logged,U.S.,zero,,,
+CUST669,,Female,12-05-2023,,USA,,Basic,Yes,20
+CUST615,,F,,,U.S.,4640.63,,N,
+,unknown,M,02-08-2022 00:00,not_logged,U.S.,zero,Premium,N,
+,,M,12-05-2023,01-07-2024 00:00,UK,-99,,,10
+CUST964,,M,2023-13-40,,,3048.88,Premium,No,
+CUST290,,Male,2023-13-40,,India,,Premium,No,
+CUST367,,,2023-13-40,09-08-2024 00:00,USA,,Gold,,
+CUST626,unknown,,,,India,,,N,
+CUST757,,F,,not_logged,,zero,Basic,Yes,five
+CUST643,unknown,,01-02-2024 00:00,,U.S.,4621.37,Gold,,
+CUST265,,,,,,3022.7,Basic,Y,
+CUST387,62,,12-05-2023,not_logged,IN,-99,Basic,Y,five
+CUST883,,Male,12-05-2023,,IN,,Basic,Y,
+CUST861,unknown,M,12-05-2023,not_logged,India,zero,Basic,Yes,
+CUST273,unknown,,,15-07-2024 00:00,,2506.6,,N,
+CUST760,unknown,F,,,,,,Y,
+CUST508,unknown,F,,30-09-2023 00:00,U.S.,,Basic,Yes,
+CUST716,unknown,F,24-11-2022 00:00,,IN,2098.9,Premium,No,
+CUST892,unknown,Female,12-05-2023,not_logged,,4932.18,,,8
+CUST303,,M,,22-08-2024 00:00,,3028.97,Basic,Y,20
+,unknown,,12-05-2023,,,-99,,Yes,
+CUST669,,F,,,U.S.,-99,Gold,No,
+CUST334,,,,,USA,-99,Gold,,
+CUST998,unknown,Male,13-11-2022 00:00,,USA,1877.34,Basic,Yes,five
+CUST981,unknown,F,31-07-2023 00:00,not_logged,India,zero,Premium,,
+CUST722,51,Female,12-05-2023,09-01-2024 00:00,,,Gold,,
+CUST936,unknown,,2023-13-40,,UK,,,,five
+CUST536,unknown,Male,14-04-2023 00:00,not_logged,,zero,Gold,,
+,,Female,,,UK,,,No,8
+CUST669,,,22-02-2022 00:00,not_logged,U.S.,-99,Premium,Y,
+CUST723,52,Male,,not_logged,UK,-99,Basic,N,
+CUST497,unknown,Male,,,,1717.42,,,
+CUST385,,F,12-05-2023,not_logged,U.S.,4397.92,,,5
+CUST249,,,12-05-2023,,USA,zero,,Yes,14
+CUST846,,F,2023-13-40,,USA,,,,
+CUST762,unknown,,13-01-2022 00:00,,India,-99,,No,five
+CUST853,,M,27-02-2022 00:00,not_logged,U.S.,,,No,
+CUST843,63,Male,2023-13-40,,UK,2272.61,Basic,,7
+CUST358,unknown,F,27-12-2023 00:00,not_logged,USA,zero,Premium,Y,five
+CUST246,,,,,USA,904.79,,N,five
+CUST294,,,,28-09-2023 00:00,,,Basic,No,
+,,,12-05-2023,,,,,,
+CUST423,35,F,,18-11-2023 00:00,,,Premium,N,five
+CUST215,,,11-07-2023 00:00,,,zero,Basic,,
+CUST553,unknown,F,12-05-2023,,UK,,Premium,Yes,20
+CUST159,unknown,Female,,,UK,,,,1
+CUST626,50,Female,2023-13-40,01-04-2024 00:00,UK,-99,,Y,8
+CUST389,unknown,Female,20-01-2022 00:00,,USA,,Gold,Y,13
+CUST518,unknown,,,15-09-2023 00:00,UK,zero,,Yes,five
+CUST591,,Male,13-06-2022 00:00,,,zero,,No,
+CUST573,48,,,,U.S.,3904.37,,Yes,five
+CUST350,47,Male,03-04-2024 00:00,not_logged,,,,N,
+CUST131,,Male,,not_logged,,-99,Gold,No,
+CUST302,unknown,Female,26-07-2023 00:00,20-06-2023 00:00,UK,,,N,
+CUST234,unknown,F,,not_logged,UK,,Premium,N,five
+CUST884,,M,04-11-2022 00:00,not_logged,IN,zero,,No,20
+CUST956,unknown,F,2023-13-40,,U.S.,3780.61,,Y,
+CUST118,,M,,11-11-2023 00:00,India,,Gold,N,0
+CUST588,,,,19-06-2023 00:00,India,2405.96,Basic,N,3
+CUST268,unknown,M,,22-05-2023 00:00,UK,472.82,,No,five
+CUST186,,,,,,-99,Basic,Yes,
+CUST505,65,Male,12-05-2023,not_logged,IN,,Basic,No,five
+CUST818,unknown,Female,2023-13-40,,USA,1474.67,Gold,,14
+CUST613,,Male,2023-13-40,,,,Gold,,
+CUST931,24,F,2023-13-40,not_logged,India,,Basic,,
+CUST265,39,Male,,not_logged,IN,-99,,N,
+CUST621,unknown,Male,25-06-2023 00:00,,USA,zero,,Y,five
+CUST207,unknown,Female,,not_logged,,,Gold,,
+CUST551,40,Male,,not_logged,,-99,Gold,Y,five
+CUST292,,,2023-13-40,,UK,4621.65,Premium,Yes,
+CUST416,,Female,,not_logged,UK,,Premium,Yes,13
+CUST523,,Female,,14-09-2023 00:00,UK,-99,Basic,N,
+CUST864,,F,,,India,86.22,,N,
+CUST971,unknown,F,,,USA,,Gold,,14
+CUST697,unknown,Male,,,,-99,Premium,No,
+CUST432,,F,2023-13-40,not_logged,India,,Gold,Y,five
+CUST599,,M,,not_logged,U.S.,4282.38,Premium,Y,
+CUST170,37,M,2023-13-40,,USA,,,,20
+CUST505,,,,19-04-2023 00:00,IN,zero,Premium,No,
+CUST540,,F,2023-13-40,,USA,4728.15,Premium,Y,
+CUST348,,M,,03-12-2023 00:00,USA,-99,Basic,Y,
+CUST589,,Male,12-05-2023,not_logged,USA,,,Y,
+CUST659,,F,12-05-2023,,USA,,Gold,N,
+CUST945,unknown,,,,USA,3444.59,Gold,N,
+CUST731,58,Female,,,India,,Premium,Yes,
+CUST726,unknown,,,not_logged,IN,zero,,Y,17
+CUST214,unknown,Male,,not_logged,U.S.,1822.23,,Yes,
+CUST635,unknown,,,,,-99,Basic,No,
+CUST166,62,,,31-07-2024 00:00,IN,,,No,
+CUST978,,M,2023-13-40,,India,-99,Basic,,
+CUST149,,F,,19-10-2023 00:00,U.S.,-99,Gold,Y,
+CUST310,,F,2023-13-40,,UK,2865.72,Gold,N,five
+CUST350,unknown,,,not_logged,IN,-99,Basic,,five
+CUST267,58,M,,not_logged,USA,,Gold,Y,
+CUST567,,,,not_logged,,,,,15
+CUST197,,F,09-02-2022 00:00,19-12-2023 00:00,India,-99,Premium,Yes,
+CUST639,,,2023-13-40,01-03-2024 00:00,India,1128.87,Basic,No,
+CUST701,,Female,12-05-2023,not_logged,UK,,Gold,Y,
+CUST894,32,,2023-13-40,not_logged,USA,-99,,,five
+CUST827,,F,2023-13-40,,UK,,,Yes,17
+CUST916,,M,,,IN,4628.04,Premium,Y,
+CUST957,,Female,,04-04-2024 00:00,U.S.,,Gold,,
+CUST728,,Female,24-10-2023 00:00,09-03-2023 00:00,IN,835.03,,N,16
+CUST959,,Female,12-05-2023,,U.S.,-99,Gold,,five
+CUST774,unknown,Female,,22-04-2024 00:00,India,,Premium,,
+CUST598,,Female,18-05-2023 00:00,not_logged,USA,,Premium,No,five
+CUST226,,F,18-12-2023 00:00,not_logged,IN,,,,
+CUST552,31,Male,2023-13-40,,UK,229.26,,Yes,five
+CUST400,unknown,M,2023-13-40,,India,zero,,,
+CUST640,,,2023-13-40,,,,Premium,N,five
+CUST357,,Male,,not_logged,India,,Premium,,14
+CUST557,,Male,,,USA,-99,Gold,Yes,4
+,,Male,,21-02-2023 00:00,India,,Basic,Yes,16
+,unknown,F,2023-13-40,,IN,zero,Basic,No,five
+CUST182,unknown,Female,12-05-2023,,USA,,Basic,No,10
+CUST473,,,2023-13-40,,USA,-99,Gold,N,
+CUST274,,Male,,not_logged,IN,zero,Basic,Y,
+CUST602,,Male,,not_logged,,,Premium,,16
+CUST167,24,Male,09-02-2024 00:00,28-05-2024 00:00,,-99,Gold,,five
+CUST874,,M,12-04-2024 00:00,16-01-2024 00:00,UK,305.43,Gold,No,
+CUST719,unknown,Male,01-06-2022 00:00,,,4232.39,,,
+CUST338,unknown,,30-11-2022 00:00,,UK,2178.63,,Yes,10
+CUST815,unknown,Male,12-05-2023,23-03-2023 00:00,U.S.,-99,Gold,,15
+CUST469,,,2023-13-40,not_logged,,,Basic,N,
+CUST449,,,13-09-2023 00:00,,U.S.,,,,five
+CUST496,,F,08-03-2022 00:00,not_logged,,-99,Basic,N,
+CUST292,unknown,M,01-01-2024 00:00,,UK,,Basic,,
+CUST891,unknown,,,,USA,,Gold,,
+CUST174,60,F,2023-13-40,05-03-2024 00:00,UK,23.74,,N,five
+CUST126,,F,18-10-2022 00:00,17-07-2023 00:00,UK,2142.57,,,five
+CUST815,,,,not_logged,USA,4149.44,Basic,Yes,12
+,,,,,India,-99,Gold,Y,9
+CUST107,unknown,Female,01-03-2023 00:00,05-05-2023 00:00,U.S.,2393.2,Basic,,1
+CUST375,40,Female,,15-10-2023 00:00,,,Gold,N,five
+CUST973,,,12-05-2023,25-07-2023 00:00,,,,,
+CUST102,46,,19-12-2022 00:00,09-01-2024 00:00,,zero,Basic,No,five
+CUST335,44,M,,,India,zero,Premium,No,
+CUST342,48,M,,not_logged,U.S.,461.76,Premium,N,
+CUST405,,Female,12-05-2023,01-08-2024 00:00,IN,,,Yes,
+CUST707,unknown,,12-05-2023,28-03-2023 00:00,India,zero,Basic,,five
+CUST972,unknown,Male,,not_logged,,4097.57,,Yes,
+CUST695,19,M,,,,-99,,,five
+CUST839,,Male,14-03-2023 00:00,,UK,1158.73,Premium,Y,five
+CUST302,unknown,Female,,,USA,2783.97,Basic,,five
+CUST572,,,,,USA,,,,
+CUST926,35,,,,IN,,Premium,,
+CUST951,,,07-03-2023 00:00,,USA,,Basic,No,five
+CUST722,,F,,17-05-2024 00:00,,,Gold,,
+CUST521,51,,,not_logged,,-99,Premium,Y,
+CUST146,unknown,F,2023-13-40,,India,,Premium,,
+,25,Male,,,India,,,No,6
+CUST967,59,,,14-04-2024 00:00,,-99,,Y,five
+CUST881,,,,,India,zero,Basic,,16
+CUST328,unknown,M,12-05-2023,,U.S.,1001.69,,,
+CUST204,,,,22-06-2024 00:00,,-99,Basic,Y,1
+CUST617,,M,2023-13-40,28-01-2024 00:00,U.S.,,,Y,
+CUST882,,M,,27-05-2023 00:00,USA,,Gold,Yes,17
+CUST887,unknown,Female,2023-13-40,not_logged,UK,,Gold,,16
+CUST884,unknown,F,,06-08-2023 00:00,,,Gold,,
+CUST824,52,M,2023-13-40,not_logged,USA,,Basic,Y,
+CUST900,unknown,M,,not_logged,USA,,,No,17
+CUST316,,F,,09-02-2023 00:00,UK,-99,Gold,Yes,
+CUST483,,,,,UK,,Gold,No,
+CUST631,,,,15-09-2023 00:00,IN,zero,,N,five
+CUST953,26,Female,,,,-99,,Y,
+CUST593,,,01-01-2024 00:00,,,,,Y,five
+CUST294,unknown,M,12-05-2023,not_logged,India,3430.78,Basic,,five
+CUST737,unknown,M,09-08-2023 00:00,,U.S.,,Gold,No,
+CUST401,,Female,,not_logged,,,Gold,N,
+CUST243,,,,not_logged,U.S.,zero,,,five
+CUST197,,F,,,,-99,,,
+CUST847,25,,2023-13-40,05-05-2024 00:00,USA,2783.3,Premium,,
+CUST519,44,,,18-10-2023 00:00,USA,zero,,No,
+CUST356,unknown,Male,,,USA,4627.64,Gold,No,16
+CUST160,,F,2023-13-40,not_logged,,,Premium,,
+CUST483,25,Male,,not_logged,U.S.,,Gold,N,five
+,unknown,Female,2023-13-40,,India,,Basic,No,five
+CUST478,30,Male,,,USA,-99,Premium,No,18
+,39,,,24-02-2023 00:00,USA,,Gold,N,five
+CUST658,,Male,2023-13-40,,USA,,Basic,,five
+CUST768,,F,,,U.S.,,Premium,N,five
+CUST938,,,,12-03-2024 00:00,IN,,Premium,No,
+CUST596,,M,12-05-2023,,IN,-99,Basic,No,
+CUST387,,,12-05-2023,14-06-2023 00:00,U.S.,zero,Basic,No,
+CUST748,,M,,29-05-2023 00:00,U.S.,3360.68,Gold,,6
+CUST718,,,,,India,1816.31,Basic,,20
+CUST487,,,12-05-2023,not_logged,UK,,Basic,Yes,
+CUST492,unknown,,,not_logged,IN,,,N,8
+CUST351,unknown,,,,UK,629.84,,Y,five
+CUST606,,Male,03-03-2024 00:00,not_logged,,zero,,,
+CUST461,,M,2023-13-40,,,zero,Gold,,
+CUST255,,F,2023-13-40,08-01-2024 00:00,USA,,Premium,No,
+CUST673,21,,,,,,,Y,five
+CUST205,unknown,,12-05-2023,not_logged,UK,,Premium,Yes,
+CUST164,,,2023-13-40,not_logged,,3803.19,Premium,,
+CUST768,unknown,F,12-05-2023,13-08-2023 00:00,,,Premium,Y,five
+CUST326,unknown,,2023-13-40,18-06-2024 00:00,IN,-99,Basic,N,
+CUST521,29,,12-05-2023,,UK,,Gold,No,
+CUST574,unknown,F,2023-13-40,,India,,,,
+CUST296,,Female,12-05-2023,,,,Basic,,1
+CUST731,44,,,not_logged,,-99,,Yes,five
+CUST105,47,F,,not_logged,U.S.,2597.43,,,0
+CUST263,,,,21-02-2023 00:00,UK,,Gold,No,
+CUST900,,,12-05-2023,05-08-2024 00:00,UK,-99,,,
+CUST520,unknown,F,12-07-2023 00:00,,USA,-99,,N,five
+CUST163,unknown,M,,11-10-2023 00:00,U.S.,-99,Premium,,five
+,,,12-05-2023,,,-99,Basic,No,
+CUST918,34,Female,,,USA,,,No,five
+CUST167,unknown,F,03-10-2023 00:00,11-05-2023 00:00,IN,zero,,,five
+CUST564,47,,14-03-2023 00:00,,U.S.,,Basic,Yes,five
+CUST655,58,Female,,09-07-2024 00:00,India,2813.4,Premium,Y,five
+CUST269,unknown,Male,12-05-2023,,USA,zero,Gold,N,five
+CUST721,,M,,,UK,,Basic,Y,
+CUST286,unknown,,12-05-2023,30-03-2023 00:00,,2792.92,,N,5
+CUST800,,F,2023-13-40,06-12-2023 00:00,,,Gold,Yes,
+CUST708,,Female,,,USA,,,N,17
+CUST444,,F,,,IN,,Gold,Yes,five
+CUST404,,M,,04-07-2023 00:00,India,,,Yes,
+CUST938,,Female,03-05-2024 00:00,17-08-2024 00:00,,3227.32,Premium,No,20
+CUST174,,Female,,not_logged,India,,Basic,No,
+CUST202,,,31-03-2022 00:00,29-01-2024 00:00,U.S.,zero,,N,five
+,,M,12-05-2023,not_logged,,zero,Basic,N,
+CUST160,27,M,02-11-2022 00:00,,UK,-99,Basic,No,
+CUST370,37,Female,24-05-2022 00:00,not_logged,IN,zero,Gold,Yes,
+CUST257,unknown,F,,not_logged,USA,1614.03,,,
+CUST185,,,12-05-2023,not_logged,USA,4633.21,Gold,N,
+CUST890,,Male,25-10-2023 00:00,not_logged,,,Premium,No,
+CUST309,unknown,,12-05-2023,,,-99,,,10
+CUST770,unknown,,12-05-2023,not_logged,U.S.,-99,Gold,,five
+CUST335,,,10-12-2022 00:00,,India,,,N,3
+CUST420,,Female,,,U.S.,zero,,Yes,five
+,unknown,Male,,,U.S.,-99,Premium,,11
+CUST535,,F,,,IN,-99,,No,five
+CUST286,,F,,not_logged,U.S.,3079.9,Basic,Y,
+CUST193,unknown,Female,20-12-2022 00:00,not_logged,U.S.,zero,Gold,N,five
+CUST478,,,2023-13-40,22-04-2024 00:00,UK,,Basic,,five
+CUST270,65,Female,,,India,-99,Premium,Y,10
+CUST855,,,18-04-2024 00:00,07-02-2023 00:00,USA,zero,Gold,,
+CUST814,,Male,12-05-2023,07-07-2024 00:00,IN,zero,,No,20
+,,,2023-13-40,,U.S.,,,,5
+CUST230,47,,,,USA,1160.27,Premium,N,five
+CUST675,unknown,,,20-06-2023 00:00,USA,zero,Premium,Y,
+CUST772,55,Female,2023-13-40,not_logged,India,zero,Premium,Yes,1
+CUST963,,M,2023-13-40,01-06-2023 00:00,India,-99,Gold,N,8
+CUST746,,M,12-05-2023,,UK,219.63,,Y,
+CUST978,unknown,Male,2023-13-40,26-03-2024 00:00,,500.76,Gold,,10
+CUST447,56,,03-05-2024 00:00,,,,Gold,,five
+CUST775,,Male,2023-13-40,,,,Gold,,13
+,,,15-04-2024 00:00,,U.S.,,,N,
+CUST748,unknown,F,,,IN,,Gold,Yes,
+CUST528,53,M,10-10-2022 00:00,not_logged,,,Basic,Y,17
+CUST891,,M,,,UK,,Gold,,15
+CUST595,unknown,,23-02-2023 00:00,not_logged,U.S.,3817.18,,N,
+CUST146,,M,,,UK,,Basic,N,12
+CUST572,,,,,IN,zero,,N,five
+CUST829,41,Male,2023-13-40,11-02-2023 00:00,UK,2912.1,Premium,,
+CUST261,unknown,,12-05-2023,02-01-2023 00:00,IN,,Basic,No,4
+CUST480,,F,,not_logged,U.S.,,,Y,17
+CUST844,unknown,M,,20-07-2023 00:00,India,zero,,,1
+CUST397,unknown,Male,,not_logged,IN,2370.04,Gold,,
+CUST649,46,,,,India,-99,Gold,,6
+CUST651,,,,not_logged,USA,zero,,No,
+CUST961,unknown,Male,2023-13-40,not_logged,USA,zero,Gold,Yes,five
+CUST517,unknown,Female,12-05-2023,not_logged,,,Basic,No,
+CUST304,52,,,,IN,2783.42,Gold,N,five
+CUST324,,Male,12-05-2023,16-03-2023 00:00,,zero,Premium,No,19
+CUST279,unknown,,12-05-2023,not_logged,,zero,,,five
+CUST824,46,,,,,,Gold,N,9
+CUST321,54,Male,2023-13-40,01-08-2024 00:00,,zero,,N,
+CUST980,,Female,,,UK,2859.95,,,10
+CUST779,28,F,,not_logged,IN,zero,Basic,Y,five
+CUST829,,,2023-13-40,07-04-2024 00:00,U.S.,,,Y,five
+CUST819,,Female,,,U.S.,332.97,,N,
+CUST615,unknown,Male,14-12-2022 00:00,,U.S.,,Gold,Yes,
+CUST807,,Female,,,USA,-99,Gold,Yes,five
+CUST918,unknown,Female,,,,,Gold,,6
+CUST858,unknown,F,,,IN,-99,,Yes,five
+CUST413,unknown,,03-02-2023 00:00,,India,-99,Basic,N,
+CUST843,,,12-05-2023,,UK,,Basic,N,five
+CUST803,34,,,24-11-2023 00:00,,zero,Premium,Yes,13
+CUST202,unknown,M,30-04-2022 00:00,13-10-2023 00:00,,zero,,No,19
+CUST443,,Male,12-05-2023,not_logged,India,zero,,N,five
+CUST409,,F,12-05-2023,,,-99,,,
+CUST656,,,02-12-2023 00:00,,U.S.,1753.16,Premium,,
+CUST669,54,,29-03-2024 00:00,,,zero,Gold,,five
+CUST420,,Female,,,U.S.,-99,,Yes,
+CUST201,unknown,F,20-05-2022 00:00,15-02-2024 00:00,U.S.,4714.42,,Yes,7
+CUST103,,F,2023-13-40,26-06-2024 00:00,IN,,Basic,,five
+CUST246,unknown,Male,12-05-2023,,,,Premium,Yes,
+CUST527,,,05-03-2024 00:00,,USA,zero,,N,
+CUST437,23,M,2023-13-40,,U.S.,-99,,No,five
+CUST479,65,F,12-05-2024 00:00,18-06-2023 00:00,India,,,No,
+CUST546,unknown,,,,India,863.52,,Yes,0
+CUST938,44,Male,2023-13-40,,IN,,Premium,,
+CUST695,,M,,,U.S.,-99,Gold,Yes,
+CUST390,,Male,12-05-2023,,,zero,Premium,No,
+CUST277,,Female,30-05-2024 00:00,,UK,,Premium,No,
+CUST383,,M,2023-13-40,not_logged,,-99,Gold,No,17
+CUST395,41,F,,,India,3472.67,Gold,,2
+CUST128,,F,24-03-2023 00:00,not_logged,USA,-99,Gold,,five
+CUST985,,Female,,,,-99,Basic,N,
+CUST614,,Female,2023-13-40,,USA,zero,Premium,Yes,five
+CUST322,,,,05-01-2023 00:00,U.S.,3322.45,Gold,,
+CUST629,33,,,,USA,zero,Basic,,
+CUST180,unknown,F,,,India,zero,,Y,five
+CUST674,unknown,,12-05-2023,06-10-2023 00:00,USA,-99,,Y,9
+CUST295,,Male,12-05-2023,,U.S.,,,Y,five
+CUST784,,Male,12-05-2023,04-08-2024 00:00,U.S.,-99,Gold,Yes,five
+CUST583,,Male,,not_logged,UK,-99,Basic,,9
+CUST246,64,F,,,UK,zero,,,
+CUST293,,Female,2023-13-40,not_logged,IN,,Gold,Yes,
+CUST497,,Female,2023-13-40,,India,,,N,five
+CUST727,65,F,,14-07-2023 00:00,U.S.,-99,Gold,N,
+CUST598,,Female,06-04-2024 00:00,not_logged,UK,3152.4,Gold,,five
+CUST147,unknown,Female,16-07-2023 00:00,,,,Basic,,4
+CUST289,23,,2023-13-40,not_logged,India,-99,Basic,No,five
+CUST509,unknown,,2023-13-40,,USA,,Premium,Yes,
+CUST448,,M,2023-13-40,not_logged,U.S.,zero,,Yes,
+CUST668,,Female,,,UK,-99,,,
+CUST332,25,Female,,not_logged,,-99,Gold,N,
+CUST546,29,,2023-13-40,23-10-2023 00:00,USA,-99,,,
+CUST562,,F,04-05-2022 00:00,not_logged,,,Basic,,14
+CUST705,unknown,,,,India,-99,Gold,Y,
+CUST954,,F,,not_logged,IN,zero,Basic,No,15
+CUST374,unknown,M,,not_logged,,zero,Basic,Y,
+CUST394,,Male,2023-13-40,,IN,,Premium,N,
+CUST146,,,2023-13-40,15-12-2023 00:00,,4913.33,Premium,,
+CUST980,,Female,,,,zero,Basic,,five
+CUST153,unknown,M,,21-08-2023 00:00,USA,-99,Gold,N,five
+CUST711,24,,,not_logged,IN,,Basic,No,
+CUST159,,,2023-13-40,,UK,,Basic,N,
+CUST277,,,,not_logged,,3683.78,Premium,Y,19
+CUST793,63,Female,2023-13-40,not_logged,IN,3144.12,Gold,,14
+CUST677,,Female,12-05-2023,not_logged,,zero,,Y,13
+CUST276,unknown,,12-05-2023,18-01-2023 00:00,UK,,Basic,N,
+CUST854,23,,19-09-2023 00:00,,USA,zero,Basic,No,five
+CUST887,65,M,,not_logged,IN,-99,,N,17
+CUST916,unknown,,08-02-2022 00:00,,,,Gold,,17
+CUST132,,F,,,,-99,,N,five
+CUST938,,M,,,,-99,,,five
+CUST610,,,,,UK,-99,Basic,N,1
+CUST634,,,2023-13-40,,IN,zero,Gold,Y,
+CUST277,31,,,,UK,zero,,,
+CUST605,,,12-05-2023,,IN,2086.52,Gold,N,2
+CUST570,unknown,Female,2023-13-40,,UK,333.52,Basic,,five
+CUST554,unknown,Female,12-05-2023,not_logged,U.S.,-99,Premium,,
+CUST211,42,,,,IN,-99,,N,4
+CUST337,,,2023-13-40,24-03-2024 00:00,India,3031.46,Premium,,
+CUST402,31,,,,U.S.,-99,,Yes,five
+CUST903,,,,not_logged,U.S.,,,,6
+CUST357,unknown,,,10-08-2024 00:00,UK,-99,Premium,Y,five
+CUST978,21,,12-05-2023,,U.S.,,Gold,Yes,
+CUST953,,Male,19-09-2022 00:00,,UK,,Premium,Y,
+CUST395,,F,12-05-2023,,USA,,Basic,Yes,
+CUST101,,,12-05-2023,not_logged,,74.09,,,
+CUST427,19,Male,05-12-2022 00:00,,U.S.,,Premium,Yes,
+CUST837,,,,not_logged,,,,,five
+CUST913,,Male,,,,,Premium,,
+,44,Male,2023-13-40,,UK,4700.48,,,
+CUST606,unknown,F,2023-13-40,,UK,266.87,Basic,No,2
+CUST808,,F,,,,-99,,,
+CUST381,,Male,12-05-2023,,U.S.,,,,9
+CUST717,,M,2023-13-40,,,,Gold,No,five
+CUST216,50,,2023-13-40,,,1615.7,,No,
+CUST639,unknown,,,,,-99,Basic,No,five
+CUST773,unknown,Male,,,IN,3285.14,Gold,Yes,
+CUST292,,Male,12-05-2023,not_logged,IN,zero,,N,
+CUST888,,Male,2023-13-40,02-03-2023 00:00,USA,,Basic,No,five
+CUST424,,,12-05-2023,,India,zero,,,five
+,unknown,Male,2023-13-40,,,zero,,N,five
+CUST290,unknown,Male,12-05-2023,not_logged,U.S.,,Gold,N,five
+CUST520,,F,,,USA,,Basic,N,
+CUST257,19,Female,,26-05-2023 00:00,India,,,,
+CUST520,,,,,,,Premium,No,
+CUST271,unknown,,,,IN,-99,,Yes,
+CUST188,,Male,12-05-2023,not_logged,USA,3950.41,,N,five
+CUST801,unknown,Female,12-05-2023,04-06-2024 00:00,,2555.52,Basic,,
+CUST254,unknown,M,12-05-2023,,,zero,,Y,
+CUST422,,M,,,India,,Gold,Yes,
+CUST950,,M,,not_logged,India,,Gold,Y,
+CUST151,,,2023-13-40,19-08-2023 00:00,IN,,Basic,,five
+CUST517,unknown,F,2023-13-40,14-03-2023 00:00,UK,,,Y,
+CUST624,unknown,F,,not_logged,IN,,Basic,No,14
+CUST250,,F,,,,zero,Premium,No,
+CUST306,20,,2023-13-40,,U.S.,,,Yes,five
+CUST673,56,F,,13-04-2023 00:00,India,zero,,N,
+CUST693,,,31-05-2024 00:00,not_logged,India,718.65,Basic,,8
+CUST708,47,Female,2023-13-40,not_logged,,,Gold,Y,
+CUST125,,Male,2023-13-40,28-04-2024 00:00,UK,2480.41,,Y,0
+CUST190,unknown,Female,,,IN,-99,Gold,Yes,five
+CUST769,,,,,,,Premium,,five
+CUST837,47,F,,,UK,,Premium,Yes,
+CUST488,,,12-05-2023,01-06-2024 00:00,IN,4792.57,,No,13
+CUST459,50,,2023-13-40,18-03-2024 00:00,UK,3292.47,,Yes,
+CUST399,,,,not_logged,,-99,,No,five
+CUST541,,,2023-13-40,,USA,,,,
+CUST368,,M,24-05-2023 00:00,,IN,,Gold,No,
+CUST256,58,F,,,UK,zero,,,2
+CUST553,unknown,,12-05-2023,not_logged,UK,-99,Gold,,5
+CUST278,35,Male,12-05-2023,,USA,,,N,3
+CUST336,19,,,not_logged,IN,zero,,Yes,
+CUST233,35,,,,IN,-99,Premium,Yes,
+CUST443,,,12-05-2023,,IN,-99,,Yes,4
+CUST613,,,,,U.S.,,Basic,Y,
+CUST561,50,,12-05-2023,03-03-2023 00:00,IN,-99,Basic,,9
+CUST962,unknown,Male,31-05-2022 00:00,,India,,Gold,Yes,4
+CUST557,,,,,U.S.,1625.21,,Yes,
+CUST426,,M,09-04-2023 00:00,,UK,,Basic,No,
+CUST505,,F,,,USA,3040.1,Basic,Yes,
+CUST665,39,Male,,04-08-2023 00:00,,,Premium,,
+CUST399,38,,12-05-2023,not_logged,India,zero,,N,
+CUST857,unknown,Female,,,UK,,Premium,N,10
+CUST451,,,,not_logged,India,zero,,,
+CUST592,34,,,,U.S.,,Gold,Yes,20
+CUST470,,,2023-13-40,,India,-99,Premium,Y,five
+CUST643,,,,,UK,-99,Gold,Yes,five
+CUST880,53,Female,2023-13-40,,UK,,Gold,,11
+CUST969,unknown,F,10-03-2024 00:00,not_logged,,,Premium,,five
+CUST106,,Female,,not_logged,UK,zero,Gold,N,16
+CUST492,,M,22-11-2023 00:00,22-10-2023 00:00,USA,,Gold,,
+CUST933,,,12-05-2023,not_logged,,,Basic,Y,five
+CUST517,unknown,Male,12-05-2023,,India,-99,Basic,N,
+CUST466,unknown,,2023-13-40,20-08-2023 00:00,,,Premium,N,
+CUST661,unknown,F,12-05-2023,06-06-2023 00:00,U.S.,,,Y,
+CUST550,unknown,,,not_logged,UK,-99,,N,
+CUST338,,F,2023-13-40,not_logged,India,zero,,No,16
+CUST252,,,2023-13-40,07-03-2024 00:00,IN,,,,5
+CUST327,28,,12-05-2023,not_logged,,,Gold,N,
+CUST925,29,,,,U.S.,,Premium,Yes,five
+CUST851,30,,30-05-2023 00:00,not_logged,,,,,
+CUST984,48,,,not_logged,IN,,,No,five
+CUST771,,,12-05-2023,,USA,4414.72,Gold,N,
+CUST649,unknown,M,12-05-2023,,,zero,,,five
+CUST304,57,,2023-13-40,13-01-2024 00:00,USA,zero,Basic,Y,
+CUST381,39,,15-04-2023 00:00,15-07-2023 00:00,India,-99,,,11
+CUST238,50,M,12-05-2023,not_logged,IN,,Basic,N,
+CUST258,unknown,Male,,,India,,,Y,4
+CUST637,unknown,,,,USA,,,N,
+,,,08-03-2024 00:00,,India,,Premium,,
+CUST299,,,,,UK,,Premium,Yes,
+CUST922,62,Male,2023-13-40,,,zero,,No,1
+CUST981,,,,,India,,,Yes,
+CUST940,,,08-01-2022 00:00,,U.S.,1616.27,,Yes,
+,53,,,21-05-2024 00:00,USA,zero,Premium,Yes,
+CUST682,,,12-05-2023,28-07-2023 00:00,UK,,Basic,No,five
+CUST947,unknown,Female,2023-13-40,08-05-2024 00:00,UK,3480.38,Basic,Yes,
+CUST928,unknown,Male,,,India,1184.74,,Y,3
+,unknown,F,08-10-2023 00:00,27-03-2024 00:00,UK,,,No,
+CUST758,,Male,2023-13-40,,IN,,,Yes,16
+CUST957,27,,30-08-2023 00:00,not_logged,IN,4206.34,,,
+CUST334,,Male,,,India,1610.79,Gold,No,
+CUST316,49,Female,12-05-2023,not_logged,U.S.,,,Y,
+,65,Female,,,U.S.,1926.13,Basic,Y,
+CUST788,unknown,,2023-13-40,not_logged,,3302.76,,N,
+CUST500,,M,2023-13-40,not_logged,,,Gold,N,
+CUST863,26,Female,21-08-2022 00:00,,UK,,,N,0
+CUST421,,M,02-05-2023 00:00,09-06-2024 00:00,UK,-99,,No,12
+CUST710,25,F,,05-04-2023 00:00,UK,1891.3,,No,7
+CUST495,36,F,23-03-2023 00:00,not_logged,,,,No,16
+CUST670,,Male,2023-13-40,,USA,1237.95,,N,
+CUST813,,Female,12-05-2023,not_logged,U.S.,-99,Premium,N,
+CUST394,unknown,,23-09-2022 00:00,,India,-99,,Yes,
+CUST232,31,,12-05-2023,03-04-2023 00:00,,,Gold,Yes,five
+CUST898,,,14-06-2022 00:00,,UK,,,N,five
+CUST135,unknown,,12-05-2023,,,,,Y,
+CUST729,,Male,,,,-99,,Y,
+CUST515,,,2023-13-40,,UK,zero,Premium,,
+CUST214,,F,,not_logged,,3938.48,Basic,Y,
+CUST532,,M,2023-13-40,,,,,,9
+,unknown,Female,,17-10-2023 00:00,India,-99,,,16
+CUST379,unknown,,12-05-2023,,U.S.,-99,Gold,N,
+CUST729,unknown,,12-05-2023,03-10-2023 00:00,India,,Basic,Yes,16
+CUST255,,M,12-05-2023,,,1933.17,,,
+CUST881,unknown,F,,,IN,,Gold,Yes,five
+CUST800,unknown,M,2023-13-40,not_logged,,,Basic,N,five
+CUST782,,M,12-05-2023,not_logged,India,,,No,13
+CUST741,unknown,,30-09-2023 00:00,,,-99,Gold,,10
+CUST432,,,,09-01-2024 00:00,,,Basic,N,5
+CUST580,,Female,,,U.S.,-99,,Y,16
+CUST795,unknown,M,12-05-2023,,U.S.,,,,10
+,,F,28-07-2022 00:00,,U.S.,-99,Premium,Y,
+CUST832,,,2023-13-40,,UK,zero,Gold,,
+CUST258,,Male,16-08-2023 00:00,28-12-2023 00:00,UK,-99,,No,2
+CUST628,18,,,not_logged,UK,2676.51,,N,18
+CUST476,46,Female,2023-13-40,14-01-2024 00:00,IN,,Gold,Yes,five
+CUST987,,,,not_logged,USA,,,Y,
+CUST413,,,,,India,,Gold,,
+CUST222,20,,,,UK,-99,Premium,N,five
+CUST535,,Male,,,USA,1822.73,Gold,N,
+CUST403,,Female,12-08-2023 00:00,,,,,N,
+CUST908,37,Male,20-03-2022 00:00,,India,,,,
+CUST132,unknown,M,12-05-2023,,USA,zero,Gold,N,
+CUST743,38,,,,IN,,Basic,N,
+CUST820,,,,24-12-2023 00:00,,-99,Premium,No,
+CUST614,,Male,27-05-2023 00:00,,,zero,Premium,N,
+CUST345,unknown,Female,,14-03-2024 00:00,India,-99,Premium,,
+CUST908,unknown,,2023-13-40,20-06-2024 00:00,IN,1839.27,Premium,No,
+CUST212,,,,,UK,3689.32,,,
+CUST959,,M,,not_logged,U.S.,zero,,Y,
+CUST474,,Male,2023-13-40,not_logged,IN,884.81,,,
+CUST861,65,F,,not_logged,U.S.,-99,Basic,Yes,
+CUST254,,Female,12-05-2023,not_logged,U.S.,78.77,Gold,Yes,five
+CUST726,57,F,2023-13-40,,India,1432.91,,Y,8
+CUST710,unknown,Male,08-03-2024 00:00,not_logged,USA,,Gold,N,
+CUST869,unknown,M,12-05-2023,not_logged,U.S.,,Basic,N,five
+CUST909,unknown,,12-05-2023,not_logged,UK,,,N,20
+CUST380,,Male,21-05-2024 00:00,not_logged,U.S.,,,No,
+CUST234,unknown,Male,,,UK,3807.26,Basic,Yes,
+CUST780,unknown,Female,12-05-2023,,UK,2185.97,,Yes,3
+,,Male,2023-13-40,22-05-2023 00:00,UK,,,Y,
+CUST424,51,,2023-13-40,not_logged,U.S.,zero,,Y,5
+CUST737,32,Female,12-05-2023,,IN,-99,Premium,N,
+,25,,19-04-2023 00:00,not_logged,India,,,,
+CUST322,unknown,Male,12-05-2023,,,,,,
+CUST491,,F,2023-13-40,11-05-2023 00:00,,-99,Gold,Y,five
+CUST196,unknown,Male,,not_logged,,-99,,,

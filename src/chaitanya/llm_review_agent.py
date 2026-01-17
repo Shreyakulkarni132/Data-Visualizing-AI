@@ -48,39 +48,19 @@ If you cannot comply, return an empty JSON object {}.
 """
 
 USER_PROMPT_TEMPLATE = """
-You are a data quality analyst.
+You are a senior data quality analyst.
 
-Your task:
-- Analyze the dataset COLUMN-WISE
-- A single column may have MULTIPLE independent problems
-- EACH problem must be returned as a SEPARATE entry
-- Recommend preprocessing steps ONLY from the allowed list
-- Do NOT group by categories
-- Return results dynamically based on the dataset
+Task:
+- Analyze the dataset column-wise using metadata(notice missing_percentage,dtype,unique_values,type) and sample rows.
+    Dataset metadata:{metadata}
+    Sample rows:{rows}
+For each column, detect all applicable issues given below, and if a column has multiple independent problems, return each as a separate entry:
+1) handle_missing_values: Apply when missing or invalid values (like N/A, unknown, empty strings) exist, and choose the treatment based on the column’s missing percentage (DROP_ROWS, IMPUTE_MEDIAN, IMPUTE_MODE, or drop_empty_columns).Note: DROP_ROWS must be suggested only when missing percentage is low compared to others(display missig percentage)
 
-IMPORTANT:
-If a column has multiple problems, return MULTIPLE entries
-with the SAME column name but DIFFERENT step_id / actions.
-
-Allowed preprocessing steps (step_id MUST match exactly):
-
-remove_duplicates
-trim_spaces
-fix_capitalization
-unify_date_formats
-handle_missing_values
-correct_data_types
-remove_special_characters
-rename_columns
-ensure_unique_column_names
-validate_numeric_ranges
-drop_empty_columns
-standardize_categorical_values
-fix_encoding_errors
-remove_invisible_characters
-remove_units_and_symbols
+2) correct_data_types:(check for each column) Apply when the values present in the column do not match the datatype specified in the metadata, after handling missing or invalid placeholders.
 
 Dataset metadata:
+
 {metadata}
 
 Sample rows:
@@ -93,7 +73,7 @@ Return STRICT JSON ONLY in this format:
     {{
       "column": "column_name",
       "step_id": "one_of_the_allowed_steps",
-      "recommended_action": "IMPUTE_MEDIAN | IMPUTE_MODE | DROP_ROWS | STANDARDIZE_FORMAT | CAST_TO_FLOAT | CAP_VALUES",
+      "recommended_action": "one_of_the_allowed_actions",
       "problem": "single concrete issue",
       "action_reason": "why this action fixes THIS issue",
       "risk_if_ignored": "impact if skipped"
@@ -142,7 +122,7 @@ def llm_review(request: ReviewRequest):
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
         metadata=json.dumps(request.dataset_metadata, indent=2),
-        rows=json.dumps(request.sample_rows[:20], indent=2)
+        rows=json.dumps(request. sample_rows[:20], indent=2)
     )
 
     response = client.chat.completions.create(
@@ -164,3 +144,4 @@ def llm_review(request: ReviewRequest):
         }
 
     return parsed
+

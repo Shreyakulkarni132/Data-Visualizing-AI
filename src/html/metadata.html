@@ -75,8 +75,10 @@ function submitMetadata() {
   const description = document.getElementById("datasetDesc").value.trim();
   const domain = document.getElementById("datasetDomain").value;
 
-  // Store OPTIONAL user context only
+  const datasetId = localStorage.getItem("dataset_id");
+
   const userContext = {
+    dataset_id: datasetId,              // 🔑 attach dataset ID
     dataset_description: description || null,
     dataset_domain: domain || null
   };

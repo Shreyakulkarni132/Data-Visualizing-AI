@@ -9,6 +9,8 @@ from collections import defaultdict
 import uuid
 import os
 from datetime import datetime
+from fastapi import HTTPException
+
 
 # =================================================
 # FastAPI App
@@ -199,6 +201,57 @@ async def upload_dataset(file: UploadFile = File(...)):
         "rows": len(df),
         "columns": list(df.columns)
     }
+
+import json
+# =================================================
+# API: Get dataset metadata for LLM Review Agent
+# =================================================
+@app.get("/get-metadata/{dataset_id}")
+def get_metadata(dataset_id: str):
+    file_path = f"uploaded_datasets/{dataset_id}.csv"
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    df = pd.read_csv(file_path)
+
+    metadata = {
+        "rows": len(df),
+        "columns": len(df.columns),
+        "column_names": list(df.columns),
+        "inferred_columns": {}
+    }
+
+    for col in df.columns:
+        series = df[col]
+        missing = series.isna().sum()
+
+        col_meta = {
+            "missing_percentage": round((missing / len(df)) * 100, 2),
+            "dtype": str(series.dtype),
+            "unique_values": int(series.nunique(dropna=True))
+        }
+
+        if pd.api.types.is_numeric_dtype(series):
+            col_meta["type"] = "numerical"
+            col_meta["min"] = make_json_safe(series.min())
+            col_meta["max"] = make_json_safe(series.max())
+
+        elif pd.api.types.is_datetime64_any_dtype(series):
+            col_meta["type"] = "datetime"
+        else:
+            col_meta["type"] = "categorical"
+
+        metadata["inferred_columns"][col] = sanitize_obj(col_meta)
+
+    # 🔥 PRINT METADATA ON TERMINAL
+    print("\n" + "="*80)
+    print(f"📊 METADATA FOR DATASET ID: {dataset_id}")
+    print(json.dumps(metadata, indent=2))
+    print("="*80 + "\n")
+
+    return metadata
+
 
 
 # =================================================

@@ -61,6 +61,13 @@
     button:hover {
       background: #125aa3;
     }
+
+    .loading {
+      text-align: center;
+      font-size: 18px;
+      color: #444;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
@@ -72,103 +79,211 @@
     Each issue is listed separately. Only checked actions will be applied.
   </div>
 
+  <div id="loading" class="loading">⏳ Generating data quality review using AI...</div>
   <div id="issues"></div>
 
   <button onclick="processSelected()">Continue</button>
 </div>
 
 <script>
-/* ================================
-   Load review data
-================================ */
-const review = JSON.parse(localStorage.getItem("llmReview"));
-const issuesDiv = document.getElementById("issues");
+/* =====================================================
+   GLOBAL DEBUG: page load
+===================================================== */
 
-if (!review) {
-  issuesDiv.innerHTML = "<p>⚠️ No review data available.</p>";
-}
+/* =====================================================
+   Call LLM Review API (with FULL DEBUGGING)
+===================================================== */
+async function callLLMReview() {
 
-/* ================================
-   Checkbox ID helper
-================================ */
-let counter = 0;
-function nextId() {
-  return "chk_" + (++counter);
-}
+  const datasetId = localStorage.getItem("dataset_id");
 
-/* ================================
-   Column-wise issues
-================================ */
-if (review && review.issues && review.issues.length) {
-  review.issues.forEach(item => {
-    const id = nextId();
+  const sampleRowsRaw = localStorage.getItem("datasetSampleRows");
 
-    issuesDiv.innerHTML += `
-      <div class="issue">
-        <div class="checkbox-row">
-          <input type="checkbox" id="${id}" checked
-            data-column="${item.column}"
-            data-step="${item.step_id}"
-            data-action="${item.recommended_action}"
-            data-problem="${item.problem}"
-            data-action-reason="${item.action_reason}"
-            data-risk="${item.risk_if_ignored}">
-          <label for="${id}">
-            <strong>${item.column}</strong>
-            → ${item.step_id} (${item.recommended_action})
-          </label>
-        </div>
+  const sampleRows = sampleRowsRaw ? JSON.parse(sampleRowsRaw) : null;
 
-        <p><b>Problem:</b> ${item.problem}</p>
-        <p><b>Recommended action:</b> ${item.recommended_action}</p>
-        <p><em>${item.action_reason}</em></p>
+  const userContextRaw = localStorage.getItem("userDatasetContext");
 
-        <div class="risk">
-          <b>Risk if skipped:</b> ${item.risk_if_ignored}
-        </div>
-      </div>
-    `;
+  const userContext = userContextRaw ? JSON.parse(userContextRaw) : {};
+
+  if (!datasetId) {
+    alert("dataset_id missing. Please upload dataset again.");
+    return;
+  }
+
+  if (!sampleRows) {
+    alert("Sample rows missing. Please upload dataset again.");
+    return;
+  }
+
+  /* -----------------------------
+     Call Metadata API
+  ----------------------------- */
+  const metaUrl = `http://localhost:8001/get-metadata/${datasetId}`;
+
+  const metaRes = await fetch(metaUrl);
+
+  if (!metaRes.ok) {
+    console.error("❌ Failed to fetch metadata");
+    alert("Failed to fetch dataset metadata. Check backend.");
+    return;
+  }
+
+  const datasetMetadata = await metaRes.json();
+  console.log("📊 Metadata received in frontend:", datasetMetadata);
+
+  /* -----------------------------
+     Build payload for LLM
+  ----------------------------- */
+  const payload = {
+    dataset_metadata: datasetMetadata,
+    sample_rows: sampleRows,
+    user_context: userContext
+  };
+
+
+  /* -----------------------------
+     Call LLM Review API
+  ----------------------------- */
+  const llmUrl = "http://localhost:8000/llm-review";
+
+  const res = await fetch(llmUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
   });
+
+
+  if (!res.ok) {
+    alert("LLM review failed. Check backend logs.");
+    return;
+  }
+
+  const reviewData = await res.json();
+  console.log("🧠 LLM Review Result:", reviewData);
+
+  localStorage.setItem("llmReview", JSON.stringify(reviewData));
+
+  return reviewData;
 }
 
-/* ================================
-   Dataset-level steps
-================================ */
-if (review && review.dataset_level_steps && review.dataset_level_steps.length) {
-  review.dataset_level_steps.forEach(item => {
-    const id = nextId();
+/* =====================================================
+   Render Review (UI)
+===================================================== */
+function renderReview(review) {
 
-    issuesDiv.innerHTML += `
-      <div class="issue">
-        <div class="checkbox-row">
-          <input type="checkbox" id="${id}" checked
-            data-column="__dataset__"
-            data-step="${item.step_id}"
-            data-action="${item.recommended_action}"
-            data-problem="${item.problem}"
-            data-action-reason="${item.action_reason}"
-            data-risk="${item.risk_if_ignored}">
-          <label for="${id}">
-            <strong>${item.step_id}</strong>
-            (${item.recommended_action})
-          </label>
+  const issuesDiv = document.getElementById("issues");
+  const loadingDiv = document.getElementById("loading");
+  loadingDiv.style.display = "none";
+
+  if (!review) {
+    issuesDiv.innerHTML = "<p>⚠️ No review data available.</p>";
+    return;
+  }
+
+  let counter = 0;
+  function nextId() {
+    return "chk_" + (++counter);
+  }
+
+  /* Column-wise issues */
+  if (review.issues && review.issues.length) {
+
+    review.issues.forEach(item => {
+      const id = nextId();
+
+      issuesDiv.innerHTML += `
+        <div class="issue">
+          <div class="checkbox-row">
+            <input type="checkbox" id="${id}" checked
+              data-column="${item.column}"
+              data-step="${item.step_id}"
+              data-action="${item.recommended_action}"
+              data-problem="${item.problem}"
+              data-action-reason="${item.action_reason}"
+              data-risk="${item.risk_if_ignored}">
+            <label for="${id}">
+              <strong>${item.column}</strong>
+              → ${item.step_id} (${item.recommended_action})
+            </label>
+          </div>
+
+          <p><b>Problem:</b> ${item.problem}</p>
+          <p><b>Recommended action:</b> ${item.recommended_action}</p>
+          <p><em>${item.action_reason}</em></p>
+
+          <div class="risk">
+            <b>Risk if skipped:</b> ${item.risk_if_ignored}
+          </div>
         </div>
+      `;
+    });
+  } else {
+    console.warn("⚠️ No column-wise issues found");
+  }
 
-        <p><b>Problem:</b> ${item.problem}</p>
-        <p><b>Recommended action:</b> ${item.recommended_action}</p>
-        <p><em>${item.action_reason}</em></p>
+  /* Dataset-level steps */
+  if (review.dataset_level_steps && review.dataset_level_steps.length) {
 
-        <div class="risk">
-          <b>Risk if skipped:</b> ${item.risk_if_ignored}
+    review.dataset_level_steps.forEach(item => {
+      const id = nextId();
+
+      issuesDiv.innerHTML += `
+        <div class="issue">
+          <div class="checkbox-row">
+            <input type="checkbox" id="${id}" checked
+              data-column="__dataset__"
+              data-step="${item.step_id}"
+              data-action="${item.recommended_action}"
+              data-problem="${item.problem}"
+              data-action-reason="${item.action_reason}"
+              data-risk="${item.risk_if_ignored}">
+            <label for="${id}">
+              <strong>${item.step_id}</strong>
+              (${item.recommended_action})
+            </label>
+          </div>
+
+          <p><b>Problem:</b> ${item.problem}</p>
+          <p><b>Recommended action:</b> ${item.recommended_action}</p>
+          <p><em>${item.action_reason}</em></p>
+
+          <div class="risk">
+            <b>Risk if skipped:</b> ${item.risk_if_ignored}
+          </div>
         </div>
-      </div>
-    `;
-  });
+      `;
+    });
+  } else {
+    console.warn("⚠️ No dataset-level steps found");
+  }
 }
 
-/* ================================
+/* =====================================================
+   Auto-run on Page Load
+===================================================== */
+(async () => {
+
+  localStorage.removeItem("llmReview");  // 🔥 disable cache during debugging
+
+  let review = await callLLMReview();
+
+  if (!review) {
+    try {
+      review = await callLLMReview();
+    } catch (err) {
+      alert("Failed to generate LLM review. Check console.");
+      return;
+    }
+  } else {
+    document.getElementById("loading").style.display = "none";
+  }
+
+  renderReview(review);
+})();
+
+/* =====================================================
    Continue button logic
-================================ */
+===================================================== */
 async function processSelected() {
 
   const uploaded = localStorage.getItem("dataset_uploaded");
@@ -182,29 +297,23 @@ async function processSelected() {
   const datasetId = localStorage.getItem("dataset_id");
 
   if (!datasetId) {
-    alert("❌ Dataset not found. Please upload the dataset again.");
+    alert("❌ Dataset not found. Please upload again.");
     return;
   }
 
   const selected = [];
 
-  document
-    .querySelectorAll('input[type="checkbox"]:checked')
-    .forEach(cb => {
-      selected.push({
-        column: cb.dataset.column,
-        step_id: cb.dataset.step,
-        recommended_action: cb.dataset.action,
-        problem: cb.dataset.problem,
-        action_reason: cb.dataset.actionReason,
-        risk_if_ignored: cb.dataset.risk
-      });
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    selected.push({
+      column: cb.dataset.column,
+      step_id: cb.dataset.step,
+      recommended_action: cb.dataset.action,
+      problem: cb.dataset.problem,
+      action_reason: cb.dataset.actionReason,
+      risk_if_ignored: cb.dataset.risk
     });
-
-  console.log("📤 Sending cleaning request:", {
-    dataset_id: datasetId,
-    actions: selected
   });
+
 
   try {
     const response = await fetch("http://localhost:8001/execute-cleaning", {
@@ -217,20 +326,15 @@ async function processSelected() {
       })
     });
 
+
     if (!response.ok) {
       throw new Error("Cleaning request failed");
     }
-
-    console.log("✅ CLEANING RESULT: File has been saved as CSV");
-
     alert("✅ Data cleaning completed successfully. Moving to KPI analysis...");
-
-    // 🔁 Redirect to KPI UI
     window.location.href = "kpi_ui.html";
 
   } catch (err) {
-    console.error("❌ Cleaning failed:", err);
-    alert("❌ Data cleaning failed. Please check backend logs.");
+    alert("❌ Data cleaning failed. Check backend logs.");
   }
 }
 </script>
