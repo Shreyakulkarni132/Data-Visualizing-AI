@@ -1,9 +1,9 @@
 import asyncio
 import nest_asyncio
-from crewai import Agent
-from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
 import os
+from dotenv import load_dotenv
+from crewai import Agent
+from langchain_openai import ChatOpenAI
 from tools import DataSummaryTool, FullDatasetTool
 
 # Fix for "no current event loop" error
@@ -16,12 +16,21 @@ nest_asyncio.apply()
 
 load_dotenv()
 
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0.3,
+    openai_api_key=os.getenv("OPENAI_API_KEY")
+)
+
+
+"""
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     verbose=True,
     temperature=0.3,  # Slightly increased for more creative KPI identification
     google_api_key=os.getenv("GEMINI_API_KEY")
 )
+"""
 
 kpi_identification_agent = Agent(
     role="Expert KPI Analyst",
