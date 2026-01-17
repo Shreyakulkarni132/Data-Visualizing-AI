@@ -12,3 +12,9 @@ crewai-tools==0.0.14
 nest_asyncio
 onnxruntime
 tabulate
+matplotlib
+seaborn
+openai
+python-multipart
+reportlab
+
