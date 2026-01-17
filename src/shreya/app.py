@@ -1,8 +1,9 @@
 # app.py
 import streamlit as st
 import pandas as pd
-from data_cleaning import clean_dataset     #  Import your cleaning function
-from crew import run_kpi_from_df             #  Import the crew runner for KPI agent
+import os
+from data_cleaning import clean_dataset
+from crew import run_kpi_from_df
 
 st.set_page_config(page_title="Data Cleaning & KPI Agent", layout="wide")
 st.title("AI-Powered Data Cleaning & KPI Analysis")
@@ -19,14 +20,13 @@ if uploaded_file is not None:
 
     if st.button("Clean and Analyze Data"):
         with st.spinner("Cleaning dataset..."):
-            cleaned_df = clean_dataset(df)  #  This gives the cleaned DataFrame
+            cleaned_df = clean_dataset(df)
 
         st.subheader("Cleaned Data Preview (Top 20 Rows)")
         st.dataframe(cleaned_df.head(20))
 
         with st.spinner("Running KPI Agent..."):
-            #  Send cleaned data directly to the crew runner
-            kpi_result = run_kpi_from_df(cleaned_df) 
+            kpi_result = run_kpi_from_df(cleaned_df)
 
         st.subheader("KPI Agent Output")
         st.write(kpi_result)
@@ -39,3 +39,7 @@ if uploaded_file is not None:
             mime="text/csv",
         )
         st.success("Data cleaned and analyzed successfully.")
+
+# Optional: Run Streamlit on a custom port (e.g., 8502)
+if __name__ == "__main__":
+    os.system("streamlit run app.py --server.port 8502")

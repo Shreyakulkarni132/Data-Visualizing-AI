@@ -1,9 +1,9 @@
 import asyncio
 import nest_asyncio
-from crewai import Agent
-from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
 import os
+from dotenv import load_dotenv
+from crewai import Agent
+from langchain_openai import ChatOpenAI
 from tools import DataSummaryTool, FullDatasetTool
 from langchain.chat_models import ChatOpenAI
 import os
@@ -26,8 +26,6 @@ llm = ChatOpenAI(
     openai_api_key=os.getenv("GROQ_API_KEY"),
     openai_api_base="https://api.groq.com/openai/v1"
 )
-
-
 
 # llm = ChatGoogleGenerativeAI(
 #     model="gemini-2.5-flash",

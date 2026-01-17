@@ -33,7 +33,7 @@ kpi_identification_task = Task(
         "- Diverse (covering different aspects of the data)\n"
     ),
     expected_output=(
-        "A structured list of 5-8 KPIs with complete details:\n"
+        "A structured list of 5-8 KPIs with complete details as 'KPI Agent Output:'\n"
         "KPI 1:\n"
         "  Name: [KPI Name]\n"
         "  Columns: [column names]\n"
@@ -64,12 +64,17 @@ data_visualization_task = Task(
         
         "**Key Requirements:**\n"
         "* **Statistical Summary:** Provide a summary you deduce from the statistics of the data and what the user should focus on further.\n"
-        "* **Dashboard Layout:** The dashboard should be user-friendly and visually appealing. Define a layout that includes well-defined sections, **cards** for key metrics, and associated visualizations.\n"
-        "* **Visualization Choices:** Select appropriate graphs and charts for each KPI (e.g., line charts for time series, bar/pie charts for categorical data, histograms for distributions), ensuring clarity and impact.\n"
+        "* **Dashboard Layout:** The dashboard should be user-friendly and visually appealing. Define a layout that includes well-defined sections,"
+        " **cards** for key metrics, and associated visualizations.\n"
+        "* **Visualization Choices:** Select appropriate graphs and charts for each KPI (e.g., line charts for time series, " 
+        " bar/pie charts for categorical data, histograms for distributions), ensuring clarity and impact.\n"
         "* **Aesthetics:** Consider color schemes, chart types, and overall aesthetics to enhance user engagement and comprehension."
     ),
     agent=data_visualization_agent,
     expected_output=(
+        "A list of graph/chart names with their chart type (whether a line chart or a pie chart or bar chart etc), description( what the chart aims to show, which kpi )"
+        " x and y column names (2 or more comulms in 1 graph), cards for key metrics also in the list"
+        "Print it with title data_visualization agent output:\n\n"
         "A comprehensive dashboard design description with well-defined and placed graphs, charts, and cards, along with a summary of key deductions for the user."
     ),
     context=[kpi_identification_task],
