@@ -1,0 +1,363 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #222;
+}
+
+/* TOP NAVBAR */
+.topbar {
+    height: 60px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: #8b3dff;
+}
+
+.profile {
+    width: 36px;
+    height: 36px;
+    background: #0a4f4f;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* MAIN LAYOUT */
+.container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    background: #f7f7f7;
+    padding: 20px;
+    border-right: 1px solid #e5e5e5;
+}
+
+.create-btn {
+    width: 100%;
+    padding: 12px;
+    background: #8b3dff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.menu {
+    list-style: none;
+    margin-top: 24px;
+}
+
+.menu li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333;
+}
+
+.menu li i {
+    width: 18px;
+    text-align: center;
+}
+
+.menu li:hover {
+    background: #eaeaea;
+}
+
+.menu li.active {
+    background: #e0e0e0;
+    font-weight: 600;
+}
+
+/* CONTENT AREA */
+.content {
+    flex: 1;
+    padding: 24px;
+    background: #ffffff;
+}
+
+/* WORKSPACE HERO */
+.workspace {
+    background: linear-gradient(135deg, #8b3dff, #c96eff);
+    border-radius: 16px;
+    padding: 40px;
+    color: white;
+}
+
+.workspace h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.workspace p {
+    max-width: 600px;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    opacity: 0.95;
+}
+
+.get-started {
+    padding: 12px 28px;
+    background: #ffffff;
+    color: #8b3dff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease; /* smooth hover animation */
+}
+
+.get-started:hover {
+    background: #ffffff; /* purple background on hover */
+    color: #8b3dff;      /* white text on hover */
+    transform: translateY(-3px); /* slight lift effect */
+}
+
+/* #ffffff  #8b3dff */
+/* QUICK TEMPLATES */
+.quick-templates {
+    display: flex;
+    gap: 16px;
+    margin: 30px 0;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.template {
+    min-width: 150px;
+    padding: 14px;
+    background: #f2f2f2;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* RECENT DESIGNS */
+.recent h2 {
+    margin-bottom: 16px;
+    font-size: 18px;
+}
+
+.design-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 50px;
+}
+
+.design-card {
+    height: 260px;                 /* Taller for vertical reports */
+    background: #f3f3f3;
+    border-radius: 12px;
+    overflow: hidden;              /* VERY IMPORTANT */
+    cursor: pointer;
+}
+
+.design-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;             /* Fills card without distortion */
+    display: block;
+}
+
+.design-card:hover img {
+    transform: scale(1.05);
+    transition: 0.3s ease;
+}
+
+/* Upload Page Container */
+.upload-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    background: linear-gradient(135deg, #8b3dff, #c96eff);
+    padding: 20px;
+}
+
+/* Upload Card */
+.upload-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 45px 40px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Title */
+.upload-card h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* Subtitle */
+.upload-card .subtitle {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Upload Box */
+.upload-box {
+    border: 2px dashed #8b3dff;
+    border-radius: 14px;
+    padding: 28px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.upload-box:hover {
+    background: rgba(139, 61, 255, 0.05);
+}
+
+/* Hide actual input */
+.upload-box input {
+    display: none;
+}
+
+/* Upload Content */
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    color: #444;
+}
+
+.upload-icon {
+    font-size: 30px;
+    color: #8b3dff;
+}
+
+/* Button */
+.upload-card .get-started {
+    margin-top: 10px;
+    padding: 14px 0;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    background: #8b3dff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.upload-card .get-started:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(139, 61, 255, 0.45);
+}
+
+/* Message */
+#successMessage {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Footer text */
+.supported {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Full-width purple header */
+.analytics-essentials .section-header {
+    background: linear-gradient(135deg, #8b3dff, #c96eff);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.analytics-essentials .section-header h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.analytics-essentials .section-header p {
+    font-size: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+    opacity: 0.95;
+}
+
+/* Horizontal analytics cards container */
+.analytics-essentials .analytics-cards {
+    display: flex;              /* horizontal line */
+    gap: 25px;                  /* space between cards */
+    overflow-x: auto;           /* scroll if screen is small */
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Individual cards */
+.analytics-essentials .analytics-cards .design-card {
+    flex: 0 0 220px;            /* fixed width, no shrinking */
+    background: #f3f3f3;
+    border-radius: 12px;
+    padding: 28px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.analytics-essentials .analytics-cards .design-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(139,61,255,0.25);
+}
+
+.analytics-essentials .analytics-cards .design-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #8b3dff;
+}
+
+.analytics-essentials .analytics-cards .design-card p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.3;
+}

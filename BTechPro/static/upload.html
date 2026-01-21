@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Dataset | ChartBot.AI</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/upload.css">
+    <!-- <link rel="stylesheet" href="/static/preview.css"> -->
+</head>
+
+<body>
+
+    <!-- ================= TOP NAV ================= -->
+    <header class="topbar">
+        <div class="logo">ChartBot</div>
+    </header>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero">
+
+        <div class="hero-container">
+
+            <!-- ===== LEFT CONTENT ===== -->
+            <div class="hero-left">
+
+                <span class="badge">DATASET ANALYZER</span>
+
+                <h1>
+                    Is your dataset<br>
+                    ready for analysis?
+                </h1>
+
+                <p class="hero-desc">
+                    Upload your dataset and let ChartBot perform automated checks,
+                    generate insights, and build analytics dashboards for better
+                    decision-making.
+                </p>
+
+                <!-- Upload Box -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="datasetUpload" accept=".csv,.xlsx,.json,.pdf">
+
+                    <p class="upload-text">
+                        Drop your dataset here or choose a file.<br>
+                        <span>CSV, Excel, JSON, PDF · Max 20MB</span>
+                    </p>
+
+                    <button id="uploadBtn" class="upload-btn" type="button">
+                        Upload Your Dataset
+                    </button>
+
+                    <p class="privacy">
+                        🔒 Privacy guaranteed
+                    </p>
+
+                    <div id="successMessage" style="margin-top:12px; font-weight:600;">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ===== RIGHT PREVIEW ===== -->
+            <div class="hero-right">
+                <img src="/static/BI1.png" alt="Analytics Preview">
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="data-preview-section" id="previewSection" style="display:none;">
+        <h2 class="section-title">Cleaned Dataset Preview</h2>
+        <div class="table-container">
+            <table id="dataTable">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="kpi-section" id="kpiSection" style="display:none;">
+        <h2 class="section-title">Key Performance Indicators</h2>
+        <div class="kpi-cards" id="kpiCards">
+            <!-- KPI cards will be injected here dynamically -->
+        </div>
+    </section>
+
+    <section class="dashboard-section" id="dashboardSection" style="display:none;">
+        <h2 class="section-title">Dashboard</h2>
+        <div id="chartsContainer" class="charts-grid"></div>
+    </section>
+
+    <!-- <script>
+        const uploadArea = document.getElementById('uploadArea');
+
+        // Open file picker ONLY when clicking upload-area
+        uploadArea.addEventListener('click', (e) => {
+            // Do NOT open picker if button was clicked
+            if (e.target.id === 'uploadBtn') return;
+            fileInput.click();
+        });
+    </script> -->
+
+
+
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="/static/final.js"></script>
+</body>
+
+</html>

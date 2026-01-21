@@ -1,0 +1,319 @@
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* ================= BODY ================= */
+body {
+    background: #ffffff;
+    color: #222;
+}
+
+/* ================= TOPBAR ================= */
+.topbar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: #8b3dff;
+}
+
+/* ================= HERO BACKGROUND ================= */
+.hero {
+    min-height: calc(100vh - 64px);
+    background:
+        radial-gradient(circle at 30% 30%, #dff7ef 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, #e6dcff 0%, transparent 40%),
+        #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+/* ================= CONTAINER ================= */
+.hero-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+/* ================= LEFT ================= */
+.hero-left {
+    flex: 1;
+}
+
+.badge {
+    font-size: 15px;
+    font-weight: 600;
+    color: #8b3dff;
+    letter-spacing: 1px;
+}
+
+.hero-left h1 {
+    font-size: 54px;
+    font-weight: 800;
+    margin: 16px 0;
+    line-height: 1.2;
+}
+
+.hero-desc {
+    font-size: 17px;
+    color: #555;
+    max-width: 520px;
+    line-height: 1.6;
+}
+
+/* ================= UPLOAD AREA ================= */
+.upload-area {
+    margin-top: 40px;
+    border: 1.8px dashed #6ad2a3;
+    border-radius: 14px;
+    padding: 30px;
+    max-width: 460px;
+    text-align: center;
+    background-color: #fafafa;
+    transition: 0.3s ease;
+}
+
+.upload-area:hover {
+    border-color: #8b3dff;
+}
+
+.upload-area input {
+    display: none;
+}
+
+.upload-text {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 18px;
+}
+
+.upload-text span {
+    font-size: 13px;
+    color: #777;
+}
+
+/* ================= BUTTON ================= */
+.upload-btn {
+    background: #8b3dff;
+    color: #ffffff;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(139, 61, 255, 0.35);
+}
+
+.privacy {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #666;
+}
+
+#successMessage {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ================= RIGHT ================= */
+.hero-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-right img {
+    max-width: 620px;
+    border-radius: 10px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+}
+
+/* ================= DATA PREVIEW ================= */
+.data-preview-section {
+    margin: 40px auto;
+    max-width: 1200px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f9f7ff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.data-preview-section .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #8b3dff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Table container */
+.table-container {
+    overflow-x: auto;
+}
+
+/* Table */
+#dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+#dataTable th, #dataTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+#dataTable th {
+    background-color: #8b3dff;
+    color: #fff;
+    font-weight: 600;
+}
+
+#dataTable tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+#dataTable tr:hover {
+    background-color: #e6dcff;
+    cursor: pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+    .hero-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-right {
+        display: none;
+    }
+
+    .data-preview-section .section-title {
+        font-size: 18px;
+    }
+}
+
+/* ================= TABLE ROW HOVER EFFECT ================= */
+#dataTable tbody tr {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+#dataTable tbody tr:hover {
+    transform: translateY(-5px); /* moves the row slightly up */
+    box-shadow: 0 8px 15px rgba(139, 61, 255, 0.25); /* soft purple shadow */
+    border-radius: 20px; 
+}
+
+/* ================= KPI SECTION ================= */
+.kpi-section {
+    margin: 40px auto;
+    max-width: 1200px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f9f7ff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.kpi-section .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #8b3dff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* KPI cards container */
+.kpi-cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Individual KPI card */
+.kpi-card {
+    flex: 0 0 220px;
+    background: #ffffff;
+    color: #8b3dff;
+    padding: 20px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 12px rgba(139, 61, 255, 0.1);
+    text-align: center;
+}
+
+/* ================= DASHBOARD SECTION ================= */
+.dashboard-section {
+    margin: 40px auto;
+    max-width: 1200px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f9f7ff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.dashboard-section .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #8b3dff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Charts grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* Chart image card */
+.charts-grid img {
+    width: 100%;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: pointer;
+}
+
+/* Hover = floating in air */
+.charts-grid img:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(139, 61, 255, 0.25);
+}

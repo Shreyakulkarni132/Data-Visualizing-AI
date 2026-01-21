@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Data Cleaning Review</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fa;
+      padding: 40px;
+    }
+
+    .panel {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .issue {
+      padding: 15px;
+      border-left: 5px solid #1976d2;
+      background: #e3f2fd;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .checkbox-row {
+      margin-bottom: 8px;
+    }
+
+    .risk {
+      color: #b71c1c;
+      margin-top: 8px;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 14px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 16px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #125aa3;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 18px;
+      color: #444;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="panel">
+    <h2>🔎 Review & Customize Recommended Changes</h2>
+    <div class="subtitle">
+      Each issue is listed separately. Only checked actions will be applied.
+    </div>
+
+    <div id="loading" class="loading">
+      ⏳ Generating data quality review using AI...
+    </div>
+
+    <div id="issues"></div>
+
+    <button onclick="processSelected()">Continue</button>
+  </div>
+
+  <script>
+    /* =====================================================
+       Call LLM Review API
+    ===================================================== */
+    async function callLLMReview() {
+      const datasetId = localStorage.getItem("dataset_id");
+      const sampleRowsRaw = localStorage.getItem("datasetSampleRows");
+      const sampleRows = sampleRowsRaw ? JSON.parse(sampleRowsRaw) : null;
+      const userContextRaw = localStorage.getItem("userDatasetContext");
+      const userContext = userContextRaw ? JSON.parse(userContextRaw) : {};
+
+      if (!datasetId || !sampleRows) {
+        alert("Dataset info missing. Please upload again.");
+        return;
+      }
+
+      /* -------- Fetch metadata (FIXED) -------- */
+      const metaRes = await fetch(
+        `http://127.0.0.1:8000/cleaning/metadata/${datasetId}`
+      );
+      if (!metaRes.ok) {
+        alert("Failed to fetch metadata.");
+        return;
+      }
+
+      const datasetMetadata = await metaRes.json();
+
+      const payload = {
+        dataset_metadata: datasetMetadata,
+        sample_rows: sampleRows,
+        user_context: userContext
+      };
+
+      /* -------- Call LLM review (FIXED) -------- */
+      const res = await fetch(`/llm-agent/llm-review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        alert("LLM review failed.");
+        return;
+      }
+
+      return await res.json();
+    }
+
+    /* =====================================================
+       Render Review
+    ===================================================== */
+    function renderReview(review) {
+      const issuesDiv = document.getElementById("issues");
+      document.getElementById("loading").style.display = "none";
+
+      if (!review) {
+        issuesDiv.innerHTML = "<p>No review data.</p>";
+        return;
+      }
+
+      let counter = 0;
+      const nextId = () => "chk_" + (++counter);
+
+      review.issues?.forEach(item => {
+        const id = nextId();
+        issuesDiv.innerHTML += `
+      <div class="issue">
+        <div class="checkbox-row">
+          <input type="checkbox" id="${id}" checked
+            data-column="${item.column}"
+            data-step="${item.step_id}"
+            data-action="${item.recommended_action}"
+            data-problem="${item.problem}"
+            data-action-reason="${item.action_reason}"
+            data-risk="${item.risk_if_ignored}">
+          <label for="${id}">
+            <strong>${item.column}</strong> → ${item.step_id}
+          </label>
+        </div>
+        <p><b>Problem:</b> ${item.problem}</p>
+        <p><b>Action:</b> ${item.recommended_action}</p>
+        <p><em>${item.action_reason}</em></p>
+        <div class="risk"><b>Risk:</b> ${item.risk_if_ignored}</div>
+      </div>
+    `;
+      });
+    }
+
+    /* =====================================================
+       Auto-run
+    ===================================================== */
+    (async () => {
+      const review = await callLLMReview();
+      renderReview(review);
+    })();
+
+    /* =====================================================
+       Continue Button
+    ===================================================== */
+    async function processSelected() {
+      const datasetId = localStorage.getItem("dataset_id");
+      if (!datasetId) {
+        alert("Dataset missing.");
+        return;
+      }
+
+      const selected = [];
+      document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        selected.push({
+          column: cb.dataset.column,
+          step_id: cb.dataset.step,
+          recommended_action: cb.dataset.action,
+          problem: cb.dataset.problem,
+          action_reason: cb.dataset.actionReason,
+          risk_if_ignored: cb.dataset.risk
+        });
+      });
+
+      const res = await fetch(`/cleaning/execute-cleaning`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dataset_id: datasetId,
+          actions: selected,
+          dry_run: false
+        })
+      });
+
+      if (!res.ok) {
+        alert("Cleaning failed.");
+        return;
+      }
+
+      alert("✅ Cleaning completed. Moving to KPI analysis...");
+      window.location.href = "/kpi_ui";
+    }
+  </script>
+
+</body>
+
+</html>
