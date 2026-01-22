@@ -1,34 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8" />
 <title>Auto KPI Dashboard</title>
+
 <style>
 body {
-  font-family: Arial;
-  background:#f4f6f9;
-  padding:20px;
-}
-h2 {
-  text-align:center;
-}
-.controls {
-  text-align:center;
-  margin-bottom:20px;
-}
-button {
-  padding:10px 20px;
-  background:#1976d2;
-  color:white;
-  border:none;
-  cursor:pointer;
-  margin:5px;
-  border-radius:4px;
-}
-button:hover {
-  background:#0f5aa0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  padding: 20px;
 }
 
-/* Hide download button initially */
+h2 {
+  text-align: center;
+}
+
+/* Controls */
+.controls {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 4px;
+}
+
+button:hover {
+  background: #0f5aa0;
+}
+
+/* Hide download initially */
 #downloadBtn {
   display: none;
 }
@@ -55,18 +62,20 @@ button:hover {
   100% { transform: rotate(360deg); }
 }
 
+/* Charts */
 #charts {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
 #charts img {
-  width:400px;
-  margin:10px;
-  border:1px solid #ccc;
-  border-radius:4px;
-  background:white;
-  padding:5px;
+  width: 400px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  padding: 5px;
 }
 </style>
 </head>
@@ -86,59 +95,19 @@ button:hover {
   <p>Generating dashboard, please wait...</p>
 </div>
 
+<!-- Charts Container -->
 <div id="charts"></div>
 
 <script>
-// ------------------------------
-// Convert KPI text → structured JSON
-// ------------------------------
-function parseKPIText(text) {
-  text = text.replace(/```plaintext|```/g, "").trim();
-  const kpis = [];
-  const blocks = text.split(/KPI \d+:/).slice(1);
-
-  blocks.forEach(block => {
-    let name = "";
-    let columns = "";
-    let chartType = "";
-
-    const lines = block.trim().split("\n");
-
-    lines.forEach(line => {
-      line = line.trim();
-
-      if (line.startsWith("Name:")) {
-        name = line.replace("Name:", "").trim();
-      }
-      else if (line.startsWith("Columns:")) {
-        columns = line.replace("Columns:", "").trim();
-      }
-      else if (line.includes("Chart Type:")) {
-        chartType = line.replace("- Chart Type:", "").trim();
-      }
-    });
-
-    kpis.push({
-      name: name,
-      columns: columns,
-      suggested_chart: chartType
-    });
-  });
-
-  return kpis;
-}
-
-
-// ------------------------------
-// Generate Dashboard Flow
-// ------------------------------
+// ---------------------------------
+// Generate Dashboard
+// ---------------------------------
 function runDashboard() {
   const generateBtn = document.getElementById("generateBtn");
   const downloadBtn = document.getElementById("downloadBtn");
   const loader = document.getElementById("loader");
   const chartsDiv = document.getElementById("charts");
 
-  // Hide buttons and show loader
   generateBtn.style.display = "none";
   downloadBtn.style.display = "none";
   loader.style.display = "block";
@@ -154,47 +123,44 @@ function runDashboard() {
   }
 
   const structuredKPIs = JSON.parse(storedKPIs);
-  console.log("📊 Using Stored KPIs:", structuredKPIs);
+  console.log("📊 KPIs:", structuredKPIs);
 
-  fetch("http://127.0.0.1:8003/generate-charts", {
+  fetch("/chart/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ kpis: structuredKPIs })
   })
   .then(res => res.json())
-  .then(chartData => {
+  .then(data => {
     loader.style.display = "none";
 
-    if (!chartData.images || chartData.images.length === 0) {
+    if (!data.images || data.images.length === 0) {
       chartsDiv.innerHTML = "<p>No charts generated.</p>";
       generateBtn.style.display = "inline-block";
       return;
     }
 
-    chartData.images.forEach(img => {
-      const imageTag = document.createElement("img");
-      imageTag.src = img;
-      chartsDiv.appendChild(imageTag);
+    data.images.forEach(imgUrl => {
+      const img = document.createElement("img");
+      img.src = imgUrl;
+      chartsDiv.appendChild(img);
     });
 
-    // Show download button after charts load
     downloadBtn.style.display = "inline-block";
   })
   .catch(err => {
     console.error(err);
     alert("Chart generation failed");
-
     loader.style.display = "none";
     generateBtn.style.display = "inline-block";
   });
 }
 
-
-// ------------------------------
-// Download Dashboard as PDF
-// ------------------------------
+// ---------------------------------
+// Download PDF
+// ---------------------------------
 function downloadPDF() {
-  window.open("http://127.0.0.1:8003/download-dashboard", "_blank");
+  window.open("/chart/download-dashboard", "_blank");
 }
 </script>
 

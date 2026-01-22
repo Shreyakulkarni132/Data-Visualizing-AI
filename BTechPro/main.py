@@ -70,7 +70,7 @@ import uuid  # for generating dataset_id
 from llm_review_agent import router as llm_review_router
 from data_cleaning_agent import router as cleaning_router
 from kpi_agent_app import router as kpi_router
-
+from chart_generator import router as chart_router
 
 app = FastAPI()
 
@@ -91,7 +91,8 @@ app.include_router(llm_review_router)
 app.include_router(cleaning_router)
 #KPI Agent Route
 app.include_router(kpi_router)
- 
+#Chart Generator
+app.include_router(chart_router)
 
 # ------------------------------
 # Home page -> final.html
@@ -120,9 +121,15 @@ def serve_review():
         return f.read()
 
 @app.get("/kpi", response_class=HTMLResponse)
-def serve_review():
+def serve_kpi_ui():
     with open("html/kpi_ui.html", "r", encoding="utf-8") as f:
         return f.read()
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def serve_dashboard():
+    with open("html/dashboard.html", "r", encoding="utf-8") as f:
+        return f.read()
+
 # ------------------------------
 # Upload dataset endpoint
 # ------------------------------

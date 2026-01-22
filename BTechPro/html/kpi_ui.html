@@ -56,7 +56,6 @@ button:hover {
 </div>
 
 <div id="output"></div>
-
 <script>
 function runKPI() {
     const output = document.getElementById("output");
@@ -78,7 +77,6 @@ function runKPI() {
 
     console.log("📤 Sending to KPI Agent:", payload);
 
-    // ✅ Call KPI API on same origin (no hardcoded port)
     fetch("/kpi/identify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -86,32 +84,43 @@ function runKPI() {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("Full API Response:", data);
+        console.log("📥 Full API Response:", data);
 
         if (data.status === "success" && data.kpi_output) {
+
+            // Show raw output
             output.innerHTML = `
                 <h3>Identified KPIs:</h3>
                 <pre>${data.kpi_output}</pre>
             `;
 
-            runBtn.style.display = "none";
-
+            // 🔥 FIX: clean + parse KPIs correctly
             const structuredKPIs = parseKPIText(data.kpi_output);
+
+            console.log("🧠 Parsed KPIs:", structuredKPIs);
+
+            if (structuredKPIs.length === 0) {
+                output.innerHTML += `
+                    <div class="error">
+                        KPI parsing failed.<br>
+                        Please ensure KPI agent output format is correct.
+                    </div>
+                `;
+                runBtn.disabled = false;
+                return;
+            }
+
             localStorage.setItem("kpi_result", JSON.stringify(data));
             localStorage.setItem("structured_kpis", JSON.stringify(structuredKPIs));
-            console.log("🚀 Structured KPIs saved:", structuredKPIs);
 
+            runBtn.style.display = "none";
             nextBtn.style.display = "inline-block";
-        } 
-        else if (data.status === "error") {
-            output.innerHTML = `<div class="error">Error: ${data.message}</div>`;
-            runBtn.disabled = false;
         } 
         else {
             output.innerHTML = `
                 <div class="error">
-                Unexpected API response:<br>
-                <pre>${JSON.stringify(data, null, 2)}</pre>
+                    Unexpected API response:
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
                 </div>
             `;
             runBtn.disabled = false;
@@ -124,47 +133,62 @@ function runKPI() {
     });
 }
 
+// Navigate to dashboard
 function goToDashboard() {
     window.location.href = "/dashboard";
 }
 
+/**
+ * ✅ FINAL KPI PARSER
+ * Handles:
+ * - markdown (**)
+ * - bullet points
+ * - extra text
+ */
 function parseKPIText(text) {
-  text = text.replace(/```plaintext|```/g, "").trim();
-  const kpis = [];
-  const blocks = text.split(/KPI \d+:/).slice(1);
 
-  blocks.forEach(block => {
-    let name = "";
-    let columns = "";
-    let chartType = "";
+    // 🔥 CLEAN MARKDOWN
+    text = text
+        .replace(/\*\*/g, "")        // remove **
+        .replace(/```/g, "")         // remove code blocks
+        .replace(/- /g, "")          // remove list dashes
+        .trim();
 
-    const lines = block.trim().split("\n");
+    const kpis = [];
+    const blocks = text.split(/KPI\s*\d+:/i).slice(1);
 
-    lines.forEach(line => {
-      line = line.trim();
-      if (line.startsWith("Name:")) {
-        name = line.replace("Name:", "").trim();
-      }
-      else if (line.startsWith("Columns:")) {
-        columns = line.replace("Columns:", "").trim();
-      }
-      else if (line.includes("Chart Type:")) {
-        chartType = line.replace("- Chart Type:", "").trim();
-      }
+    blocks.forEach(block => {
+        let name = "";
+        let columns = "";
+        let chartType = "";
+
+        const lines = block.split("\n");
+
+        lines.forEach(line => {
+            line = line.trim();
+
+            if (line.toLowerCase().startsWith("name:")) {
+                name = line.replace(/name:/i, "").trim();
+            }
+            else if (line.toLowerCase().startsWith("columns:")) {
+                columns = line.replace(/columns:/i, "").trim();
+            }
+            else if (line.toLowerCase().includes("chart type")) {
+                chartType = line.replace(/chart type:/i, "").trim();
+            }
+        });
+
+        if (name && columns && chartType) {
+            kpis.push({
+                name: name,
+                columns: columns,
+                suggested_chart: chartType
+            });
+        }
     });
 
-    if (name && columns && chartType) {
-      kpis.push({
-        name: name,
-        columns: columns,
-        suggested_chart: chartType
-      });
-    }
-  });
-
-  return kpis;
+    return kpis;
 }
-
 </script>
 
 </body>

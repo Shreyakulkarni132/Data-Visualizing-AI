@@ -794,10 +794,31 @@ kpi_identification_agent = Agent(
 )
 
 kpi_identification_task = Task(
-    description="Generate professional KPIs",
-    expected_output="Structured KPI list",
+    description="""
+Generate KPIs in STRICT PLAIN TEXT FORMAT.
+DO NOT use markdown, bullet points, emojis, or **.
+
+Return output EXACTLY like this:
+
+KPI 1:
+Name: <KPI Name>
+Columns: <comma separated columns>
+Chart Type: <Bar / Line / Pie / Scatter>
+
+KPI 2:
+Name: ...
+Columns: ...
+Chart Type: ...
+
+Rules:
+- No ** or markdown
+- No explanations
+- No extra text before or after
+""",
+    expected_output="Plain text KPIs only",
     agent=kpi_identification_agent
 )
+
 
 crew = Crew(
     agents=[kpi_identification_agent],
@@ -828,5 +849,5 @@ def identify_kpis(request: KPIRequest):
 
     return {
         "status": "success",
-        "kpi_output": str(result)
+        "kpi_output": result
     }
