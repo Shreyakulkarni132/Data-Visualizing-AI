@@ -3,37 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <title>Upload Dataset</title>
+
+  <!-- PapaParse -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <!-- Main Theme CSS (optional if you already use it globally) -->
+  <link rel="stylesheet" href="/static/final.css">
+
   <style>
+    /* Soft, minimal background (less purple) */
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      height: 100vh;
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: linear-gradient(135deg, #f2efff, #e8e4ff);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
+    /* Upload Card */
     .upload-box {
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 45px 40px;
+      width: 100%;
+      max-width: 500px;
       text-align: center;
-      width: 400px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .upload-box h2 {
+      font-size: 30px;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .upload-box p {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* File upload area */
+    .file-area {
+      border: 2px dashed #6a5cff;
+      border-radius: 14px;
+      padding: 28px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      color: #444;
+      background: #fafafe;
+    }
+
+    /* NO COLOR CHANGE ON HOVER */
+    .file-area:hover {
+      transform: translateY(-2px);
     }
 
     input[type="file"] {
-      margin-top: 20px;
+      display: none;
+    }
+
+    .file-icon {
+      font-size: 34px;
+      color: #6a5cff;
+      margin-bottom: 8px;
+    }
+
+    /* Upload Button */
+    .upload-btn {
+      margin-top: 10px;
+      padding: 14px 0;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+      background: #6a5cff;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* NO COLOR CHANGE ON HOVER */
+    .upload-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(106, 92, 255, 0.25);
     }
   </style>
 </head>
+
 <body>
 
 <div class="upload-box">
   <h2>Upload Your Dataset</h2>
-  <p>CSV or Excel file</p>
-  <input type="file" id="fileInput" accept=".csv,.xlsx" />
+  <p>Upload your CSV or Excel file to begin automated analytics.</p>
+
+  <!-- Upload Area -->
+  <label class="file-area">
+    <div class="file-icon">📁</div>
+    <strong>Click to upload file</strong>
+    <br>
+    <small>Supported: .csv, .xlsx</small>
+    <input type="file" id="fileInput" accept=".csv,.xlsx" />
+  </label>
+
+  <button class="upload-btn">Upload & Analyze</button>
 </div>
 
 <script>
@@ -42,10 +120,9 @@ async function uploadFileToBackend(file) {
   formData.append("file", file);
 
   const res = await fetch("/cleaning/upload-dataset", {
-  method: "POST",
-  body: formData
+    method: "POST",
+    body: formData
   });
-
 
   if (!res.ok) {
     throw new Error("Dataset upload failed");
@@ -59,7 +136,6 @@ async function uploadFileToBackend(file) {
 
   console.log("✅ Dataset uploaded. ID:", data.dataset_id);
 
-  // Backend is the ONLY authority for metadata
   localStorage.setItem("dataset_id", data.dataset_id);
   localStorage.setItem("dataset_uploaded", "true");
 }
@@ -70,7 +146,6 @@ document.getElementById("fileInput").addEventListener("change", async function (
 
   await uploadFileToBackend(file);
 
-  // PapaParse is used ONLY for preview + sample rows
   Papa.parse(file, {
     header: true,
     skipEmptyLines: true,
@@ -83,19 +158,16 @@ document.getElementById("fileInput").addEventListener("change", async function (
       console.log("📊 UI ONLY DATASET ANALYSIS (Not metadata)");
       console.log(analysis);
 
-      // ✔ Used by LLM as example rows
       localStorage.setItem(
         "datasetSampleRows",
         JSON.stringify(data.slice(0, 30))
       );
 
-      // ✔ Used only for UI dashboards / charts
       localStorage.setItem(
         "datasetAnalysis",
         JSON.stringify(analysis)
       );
 
-      // ❌ This is NOT sent as dataset_metadata anymore
       console.log("⚠ datasetAnalysis is UI-only. Backend provides real metadata.");
 
       window.location.href = "/metadata";

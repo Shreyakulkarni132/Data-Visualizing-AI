@@ -3,60 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dataset Context</title>
+
   <style>
+    /* Soft background – consistent with your theme */
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      height: 100vh;
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: linear-gradient(135deg, #f2efff, #e8e4ff);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
+    /* Main Card */
     .card {
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      width: 450px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-
-    textarea, select {
+      background: #ffffff;
+      padding: 50px 45px;
+      border-radius: 22px;
       width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+      max-width: 520px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
     }
 
+    /* Main Heading */
+    .card h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #222;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    /* Section Labels */
+    .card label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-top: 6px;
+    }
+
+    /* Inputs */
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: #fafafe;
+      color: #333;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    /* Button */
     button {
       margin-top: 20px;
-      padding: 12px;
+      padding: 14px;
       width: 100%;
       cursor: pointer;
-      background: #1976d2;
-      color: white;
+      background: #6a5cff;
+      color: #ffffff;
       border: none;
-      border-radius: 5px;
+      border-radius: 14px;
       font-size: 16px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
+    /* No color change on hover */
     button:hover {
-      background: #125aa3;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(106, 92, 255, 0.25);
     }
   </style>
 </head>
+
 <body>
 
 <div class="card">
-  <h2>Tell us about your dataset (Optional)</h2>
+  <!-- Stronger Heading Structure -->
+  <h1>Dataset Information</h1>
+  <div class="subtitle">
+    Help us understand your dataset better. This step is optional but improves analysis quality.
+  </div>
 
-  <label>What is this dataset about?</label>
-  <textarea id="datasetDesc" rows="3" placeholder="Short description (optional)..."></textarea>
+  <label for="datasetDesc">Describe your dataset</label>
+  <textarea
+    id="datasetDesc"
+    rows="3"
+    placeholder="Example: Sales data for an e-commerce platform covering 2023–2025..."
+  ></textarea>
 
-  <label style="margin-top:15px; display:block;">Which domain best fits this dataset?</label>
+  <label for="datasetDomain">Select the most relevant domain</label>
   <select id="datasetDomain">
-    <option value="">-- Select Domain (optional) --</option>
+    <option value="">-- Choose a domain (optional) --</option>
     <option>Business / Sales</option>
     <option>Marketing</option>
     <option>Finance</option>
@@ -67,7 +124,7 @@
     <option>Other</option>
   </select>
 
-  <button onclick="submitMetadata()">Continue</button>
+  <button onclick="submitMetadata()">Continue to Review</button>
 </div>
 
 <script>
@@ -78,7 +135,7 @@ function submitMetadata() {
   const datasetId = localStorage.getItem("dataset_id");
 
   const userContext = {
-    dataset_id: datasetId,              // 🔑 attach dataset ID
+    dataset_id: datasetId,
     dataset_description: description || null,
     dataset_domain: domain || null
   };
@@ -87,7 +144,7 @@ function submitMetadata() {
 
   console.log("📝 Optional dataset context saved:", userContext);
 
-  // Move to next step: review.html
+  // Move to next step
   window.location.href = "/review";
 }
 </script>
