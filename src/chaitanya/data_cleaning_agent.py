@@ -189,7 +189,11 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @app.post("/upload-dataset")
 async def upload_dataset(file: UploadFile = File(...)):
-    df = pd.read_csv(io.BytesIO(await file.read()))
+    df = pd.read_csv(
+        io.BytesIO(await file.read()),
+        encoding="latin1"
+    )
+
     dataset_id = str(uuid.uuid4())
 
     file_path = os.path.join(UPLOAD_DIR, f"{dataset_id}.csv")
@@ -259,6 +263,39 @@ def get_metadata(dataset_id: str):
 # =================================================
 from fastapi import Response, status
 
+@app.post("/execute-cleaning")
+def execute_cleaning(request: CleaningRequest):
+    file_path = f"uploaded_datasets/{request.dataset_id}.csv"
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Dataset file not found")
+
+    df = pd.read_csv(file_path)
+
+    cleaned_df, logs, run_id = execute_cleaning_plan(
+        df,
+        request.actions,
+        request.dry_run
+    )
+
+    result = {
+        "run_id": run_id,
+        "dataset_id": request.dataset_id,
+        "dry_run": request.dry_run,
+        "applied_actions": logs
+    }
+
+    if not request.dry_run:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{request.dataset_id}_{run_id}_{timestamp}.csv"
+        save_path = os.path.join(CLEANED_DATA_DIR, filename)
+        cleaned_df.to_csv(save_path, index=False)
+        result["saved_file"] = filename
+
+    return result
+
+
+'''
 @app.post("/execute-cleaning", status_code=status.HTTP_204_NO_CONTENT)
 def execute_cleaning(request: CleaningRequest):
     file_path = f"uploaded_datasets/{request.dataset_id}.csv"
@@ -287,3 +324,4 @@ def execute_cleaning(request: CleaningRequest):
 
     # 🚫 NO return body
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+'''

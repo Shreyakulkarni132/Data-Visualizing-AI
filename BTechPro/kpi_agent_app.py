@@ -1,4 +1,3 @@
-
 import asyncio
 import nest_asyncio
 import os
@@ -44,7 +43,7 @@ load_dotenv()
 # Paths
 # --------------------------------------------------
 CLEANED_DATASET_DIR = "cleaned_datasets"
-KPI_RAG_CSV = KPI_RAG_CSV = r"C:\\allenvs\\Agents\\Data-Visualizing-AI\\BTechPro\\Rag_data\\BE project KPI data - Sheet1.csv"
+KPI_RAG_CSV = KPI_RAG_CSV = r"C:\Users\shrey\OneDrive\Desktop\Projects\final_year_project\Data-Visualizing-AI\BTechPro\Rag_data\BE project KPI data - Sheet1.csv"
 KPI_VECTOR_DIR = "kpi_rag_index"
 
 
@@ -142,7 +141,7 @@ DataSummaryTool = Tool(
 
 
 
-
+"""
 # --------------------------------------------------
 # RAG Vector Store
 # --------------------------------------------------
@@ -215,6 +214,137 @@ KPIKnowledgeTool = Tool(
     func=retrieve_kpi_knowledge,
     description="Retrieves relevant KPI patterns from the KPI knowledge base."
 )
+"""
+# --------------------------------------------------
+# RAG Vector Store (WITH METADATA)
+# --------------------------------------------------
+def build_or_load_kpi_vectorstore():
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=os.getenv("OPENAI_API_KEY")
+    )
+
+    if os.path.exists(KPI_VECTOR_DIR):
+        return FAISS.load_local(
+            KPI_VECTOR_DIR,
+            embeddings,
+            allow_dangerous_deserialization=True
+        )
+
+    df = pd.read_csv(KPI_RAG_CSV)
+    documents = []
+
+    for _, row in df.iterrows():
+        semantic_text = (
+            f"Dataset: {row['dataset_name']}\n"
+            f"Column: {row['kpi']}\n"
+            f"Description: {row['description']}\n"
+            f"Domain: {row['domain']}\n"
+            f"Data Type: {row['dtype']}\n"
+            f"Label: {'KPI' if row['is_kpi'] == 1 else 'Non-KPI'}"
+        )
+
+        metadata = {
+            "dataset_name": row["dataset_name"],
+            "column": row["kpi"],
+            "domain": row["domain"],
+            "dtype": row["dtype"],
+            "is_kpi": int(row["is_kpi"])
+        }
+
+        documents.append(
+            Document(
+                page_content=semantic_text,
+                metadata=metadata
+            )
+        )
+
+    vectorstore = FAISS.from_documents(documents, embeddings)
+    vectorstore.save_local(KPI_VECTOR_DIR)
+
+    print(f"✅ KPI RAG index rebuilt and saved at: {KPI_VECTOR_DIR}")
+    return vectorstore
+
+
+kpi_vectorstore = build_or_load_kpi_vectorstore()
+
+
+# --------------------------------------------------
+# TOOL 2: KPI RAG Retrieval (DOMAIN-AWARE + CONTRASTIVE)
+# --------------------------------------------------
+def retrieve_kpi_knowledge(domain: str = "", columns: Optional[list] = None):
+    """
+    Retrieves domain-aligned KPI and NON-KPI examples for contrastive reasoning.
+    """
+
+    column_text = ", ".join(columns) if columns else "unknown columns"
+
+    # Strong semantic classification-style query
+    search_query = (
+        f"You are classifying dataset columns into KPI vs non-KPI.\n"
+        f"Domain: {domain}\n"
+        f"Columns present: {column_text}\n"
+        f"Prefer numerical or aggregatable columns for KPIs.\n"
+        f"Retrieve historical KPI vs non-KPI examples with similar column roles."
+    )
+
+
+    # --- Positive KPI examples ---
+    positive_examples = kpi_vectorstore.similarity_search(
+        search_query,
+        k=3,
+        filter={"is_kpi": 1, **({"domain": domain} if domain else {})}
+
+    )
+
+    # --- Negative NON-KPI examples ---
+    negative_examples = kpi_vectorstore.similarity_search(
+        search_query,
+        k=2,
+        filter={"is_kpi": 0, **({"domain": domain} if domain else {})}
+    )
+
+    # ---------- DOMAIN FALLBACK ----------
+    if len(positive_examples) < 2:
+        positive_examples = kpi_vectorstore.similarity_search(
+            search_query,
+            k=3,
+            filter={"is_kpi": 1}
+        )
+
+    if len(negative_examples) < 1:
+        negative_examples = kpi_vectorstore.similarity_search(
+            search_query,
+            k=2,
+            filter={"is_kpi": 0}
+        )
+
+
+    positive_context = "\n\n".join(
+        [doc.page_content for doc in positive_examples]
+    )
+
+    negative_context = "\n\n".join(
+        [doc.page_content for doc in negative_examples]
+    )
+
+    return (
+        "=== KPI KNOWLEDGE BASE (DOMAIN-MATCHED, CONTRASTIVE) ===\n\n"
+        "POSITIVE KPI EXAMPLES (patterns to emulate):\n"
+        f"{positive_context}\n\n"
+        "NEGATIVE NON-KPI EXAMPLES (patterns to avoid):\n"
+        f"{negative_context}\n\n"
+        "Use the contrast between these examples to design strong, non-trivial KPIs."
+    )
+
+
+KPIKnowledgeTool = Tool(
+    name="retrieve_kpi_knowledge",
+    func=retrieve_kpi_knowledge,
+    description=(
+        "Retrieves domain-aligned KPI and non-KPI examples from the knowledge base "
+        "for contrastive KPI reasoning."
+    )
+)
 
 
 # --------------------------------------------------
@@ -233,20 +363,24 @@ llm = ChatOpenAI(
 kpi_identification_agent = Agent(
     role="Strategic KPI Designer",
     goal=(
-        "Design analytically strong, multi-dimensional KPIs that combine multiple "
-        "columns and produce executive-grade dashboard insights. "
-        "Avoid shallow single-column KPIs unless strategically justified."
+        "Design analytically strong, multi-dimensional KPIs using domain-aware "
+        "patterns retrieved from a KPI knowledge base. "
+        "Every KPI must be grounded in retrieved historical examples, not guesswork."
     ),
     verbose=True,
     memory=True,
     backstory=(
-        "You are not a metric reporter. You are a KPI architect.\n"
-        "You design KPIs that show relationships, efficiency, behavior patterns, and business performance.\n"
-        "Your KPIs must feel like insights, not statistics."
+        "You are a senior KPI architect.\n"
+        "You do NOT invent KPIs from intuition alone.\n"
+        "You ALWAYS consult a KPI knowledge base to understand:\n"
+        "- What has historically been a KPI in similar domains\n"
+        "- What should explicitly NOT be treated as a KPI\n\n"
+        "You use retrieved examples as anchors and then adapt them intelligently "
+        "to the current dataset."
     ),
     tools=[DataSummaryTool, KPIKnowledgeTool],
     llm=llm,
-    allow_delegation=True
+    allow_delegation=False
 )
 
 # --------------------------------------------------
@@ -254,53 +388,81 @@ kpi_identification_agent = Agent(
 # --------------------------------------------------
 kpi_identification_task = Task(
     description=(
-        "Optional user context (weak hint):\n"
-        "- Dataset Description: {user_dataset_description}\n"
-        "- Dataset Domain: {user_dataset_domain}\n\n"
+        "You are provided with:\n"
+            "• Dataset Description (optional)\n"
+            "• Dataset Domain (explicit — MUST be respected unless input is others)\n"
+            "• Dataset Row Count (scale indicator)\n"
+            "• RAG-based KPI Knowledge (via retrieve_kpi_knowledge)\n"
 
-        "You MUST generate analytically rich KPIs.\n\n"
+            "IMPORTANT RULES:\n"
+            "• NEVER override or infer a different domain, please use semantics only to find related domains if needed\n"
+            "• Use the provided domain as the primary filter\n"
+            "• Dataset size MUST influence chart selection, make sure you take in consideration the number of rows before giving a chart\n"
 
-        "Mandatory KPI composition:\n"
-        "• At least 2 KPIs using a SINGLE column\n"
-        "• At least 3 KPIs using DUAL columns (ratios, comparisons, dependencies)\n"
-        "• At least 3 KPIs using MULTI columns (3 or more columns, composite insights)\n\n"
+        "CRITICAL RULES:\n"
+        "1. The user-provided dataset domain is the PRIMARY domain.\n"
+        "2. You MUST NOT override or ignore it unless its other or none.\n"
+        "3. If an exact domain match is weak or missing in the KPI knowledge base:\n"
+        "   - Use column names, dataset description, and table semantics\n"
+        "   - Retrieve the closest RELATED domain patterns via the knowledge base\n\n"
 
-        "Avoid trivial KPIs like simple counts or averages unless they are part of a deeper business story.\n\n"
+        "You are REQUIRED to use the KPI knowledge base (RAG).\n"
+        "All KPIs MUST be justified using retrieved positive and negative examples.\n\n"
 
-        "Each KPI must:\n"
-        "• Combine multiple signals where possible\n"
-        "• Reflect operational or business decision value\n"
-        "• Be something a dashboard user would act on\n\n"
+        "PROCESS (MANDATORY ORDER):\n"
+        "STEP 1: Call get_data_summary to understand columns and semantics.\n"
+        "STEP 2: Use the USER-PROVIDED DOMAIN as-is.\n"
+        "STEP 3: Call retrieve_kpi_knowledge with:\n"
+        "        - domain = user dataset domain\n"
+        "        - columns = column names from the dataset\n"
+        "STEP 4: Analyze retrieved POSITIVE KPI patterns and NEGATIVE non-KPI patterns.\n"
+        "STEP 5: Generate KPIs that:\n"
+        "        - Align with positive patterns\n"
+        "        - Explicitly avoid negative patterns\n\n"
 
-        "Charts:\n"
-        "• Mix of advanced + basic types:\n"
-        "  - Line, Bar, Heatmap, Funnel, Stacked Bar, Radar, Area, Boxplot\n"
-        "• Titles must be:\n"
+        "STEP 3 is MANDATORY. You MUST call retrieve_kpi_knowledge before generating KPIs.\n"
+
+        "MANDATORY KPI COMPOSITION:\n"
+        "• At least 2 SINGLE-column KPIs (only if strongly justified)\n"
+        "• At least 3 DUAL-column KPIs (ratios, dependencies, efficiencies)\n"
+        "• At least 3 MULTI-column KPIs (3+ columns, composite business insights)\n\n"
+
+        "AVOID:\n"
+        "• Pure timestamps, IDs, or locations as KPIs\n"
+        "• Simple counts or averages without business interpretation\n\n"
+
+        "Each KPI MUST:\n"
+        "• Reference dataset columns explicitly\n"
+        "• Reflect a decision-making or operational insight\n"
+        "• Be something a dashboard user would act upon\n\n"
+
+        "Use Dataset Rows: {{dataset_rows}} to classify dataset size as:\n"
+        "- Small (<5k)\n"
+        "- Medium (5k–50k)\n"
+        "- Large (>50k)\n"
+        "and choose charts accordingly.\n\n"
+
+        "CHART REQUIREMENTS:\n"
+        "• Use a mix of basic and advanced charts based on its size:\n"
+        "  Line, Bar, Heatmap, Funnel, Stacked Bar, Radar, Area, Boxplot, pie chart etc\n"
+        "• Chart titles must be:\n"
         "  - Professional\n"
-        "  - 4–7 words\n"
-        "  - Clearly describe the business meaning\n"
-        "Examples:\n"
-        "  - 'Booking Cancellation Behavior Over Time'\n"
-        "  - 'Revenue Performance by Market Segment'\n"
-        "  - 'Guest Stay Pattern Analysis'\n"
-        "  - 'Booking Lead Time Distribution'\n\n"
+        "  - 4 to 7 words\n"
+        "  - Business-meaning focused\n\n"
 
-        "Process:\n"
-        "STEP 1: Call get_data_summary\n"
-        "STEP 2: Infer dataset domain\n"
-        "STEP 3: Call retrieve_kpi_knowledge\n"
-        "STEP 4: Generate 8–12 KPIs meeting the composition rules\n"
-        "STEP 5: Output ONLY in the required format\n"
+        "OUTPUT RULE:\n"
+        "Output ONLY in the specified KPI format.\n"
+        "Do NOT explain your process or mention internal tools."
     ),
 
     expected_output=(
         "KPI <n>:\n"
         "  Name: <Descriptive Professional KPI Name>\n"
         "  Columns: <Column names used>\n"
-        "  Reasoning: <Explain business or operational value clearly>\n"
+        "  Reasoning: <Business or operational justification, grounded in RAG examples>\n"
         "  Suggested Chart:\n"
-        "    - Chart Type: <Advanced or basic chart>\n"
-        "    - Chart Title: <Professional descriptive title (4–7 words)>\n\n"
+        "    - Chart Type: <Chart type>\n"
+        "    - Chart Title: <4 to 7 word professional title>\n\n"
     ),
 
     agent=kpi_identification_agent
@@ -321,6 +483,7 @@ crew = Crew(
 class KPIRequest(BaseModel):
     dataset_description: Optional[str] = None
     dataset_domain: Optional[str] = None
+    dataset_rows: Optional[int] = None
 
 
 # --------------------------------------------------
@@ -330,7 +493,8 @@ class KPIRequest(BaseModel):
 def identify_kpis(request: KPIRequest):
     inputs = {
         "user_dataset_description": request.dataset_description or "",
-        "user_dataset_domain": request.dataset_domain or ""
+        "user_dataset_domain": request.dataset_domain or "",
+        "dataset_rows": request.dataset_rows or 0
     }
 
     result = crew.kickoff(inputs=inputs)
