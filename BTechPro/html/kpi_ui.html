@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+<<<<<<< HEAD
 <meta charset="UTF-8">
 <title>KPI Identification</title>
 
@@ -127,10 +129,176 @@ button:hover {
   display: none;
 }
 </style>
+=======
+    <meta charset="UTF-8">
+    <title>KPI Identification Result</title>
+    <style>
+        body {
+            font-family: "Segoe UI", system-ui, sans-serif;
+
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            /* stops scrolling completely */
+
+            display: flex;
+            justify-content: flex-start;
+            /* moves panel toward left */
+            align-items: center;
+            position: relative;
+
+            padding-left: 120px;
+            /* controls how much left space you want */
+
+            background:
+                radial-gradient(circle at 30% 30%, #dff7ef 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, #e6dcff 0%, transparent 40%);
+        }
+
+        /* MAIN PANEL */
+        .panel {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            max-width: 750px;
+            /* width: 100%; */
+            margin: 0;
+
+            border: 2px solid #8b3dff;
+
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+            animation: floatIn 0.6s ease;
+        }
+
+        /* TITLE */
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* BUTTONS */
+        button {
+            padding: 14px 24px;
+            font-size: 16px;
+            background: #8b3dff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 61, 255, 0.35);
+        }
+
+        /* OUTPUT BOX */
+        #output {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 10px;
+            /* border-left: 5px solid #8b3dff; */
+
+            white-space: pre-wrap;
+
+            font-size: 18px;
+            /* bigger readable text */
+            line-height: 1.6;
+            /* better spacing */
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        #nextBtn {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* STATES */
+
+        .error {
+            color: #b71c1c;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: #444;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* animation same as review page */
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Back card */
+        body::before {
+            content: "";
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-30%);
+            width: 500px;
+            height: 300px;
+
+            background: url("./Images/report2.png") center / cover no-repeat;
+
+            border-radius: 14px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        /* Front card */
+        body::after {
+            content: "";
+            position: absolute;
+            right: 150px;
+            top: 50%;
+            transform: translateY(-55%);
+
+            width: 500px;
+            height: 300px;
+
+            background: url("./Images/report1.png") center / cover no-repeat;
+
+            border-radius: 14px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+
+            z-index: 2;
+            transition: transform 0.4s ease;
+        }
+
+        /* Hover effect FIX */
+        body:hover::before {
+            transform: translateY(-35%) scale(1.03);
+        }
+
+        body:hover::after {
+            transform: translateY(-60%) scale(1.05);
+        }
+    </style>
+>>>>>>> a6c88db (Done with All changes and UI)
 </head>
 
 <body>
 
+<<<<<<< HEAD
 <div class="panel">
   <h1>📊 KPI Identification</h1>
   <div class="subtitle">
@@ -277,6 +445,158 @@ function parseKPIText(text) {
   return kpis;
 }
 </script>
+=======
+    <div class="panel">
+
+        <h1>📊 KPI Identification Agent</h1>
+
+        <div style="text-align:center;">
+            <button id="runBtn" onclick="runKPI()">Run KPI Agent</button>
+        </div>
+
+        <div id="output"></div>
+
+        <div style="text-align:center;">
+            <button id="nextBtn" onclick="goToDashboard()">Continue → Dashboard</button>
+        </div>
+
+    </div>
+    <script>
+        function runKPI() {
+            const output = document.getElementById("output");
+            const nextBtn = document.getElementById("nextBtn");
+            const runBtn = document.getElementById("runBtn");
+
+            // Reset UI
+            nextBtn.style.display = "none";
+            runBtn.disabled = true;
+            output.innerHTML = "<div class='loading'>Running KPI agent, please wait...</div>";
+
+            // Read optional user context saved from metadata.html
+            const userContext = JSON.parse(localStorage.getItem("userDatasetContext")) || {};
+
+            const payload = {
+                dataset_description: userContext.dataset_description || null,
+                dataset_domain: userContext.dataset_domain || null
+            };
+
+            console.log("📤 Sending to KPI Agent:", payload);
+
+            fetch("/kpi/identify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("📥 Full API Response:", data);
+
+                    if (data.status === "success" && data.kpi_output) {
+
+                        // Show raw output
+                        output.innerHTML = `
+                <h3>Identified KPIs:</h3>
+                <pre>${data.kpi_output}</pre>
+            `;
+
+                        // 🔥 FIX: clean + parse KPIs correctly
+                        const structuredKPIs = parseKPIText(data.kpi_output);
+
+                        console.log("🧠 Parsed KPIs:", structuredKPIs);
+
+                        if (structuredKPIs.length === 0) {
+                            output.innerHTML += `
+                    <div class="error">
+                        KPI parsing failed.<br>
+                        Please ensure KPI agent output format is correct.
+                    </div>
+                `;
+                            runBtn.disabled = false;
+                            return;
+                        }
+
+                        localStorage.setItem("kpi_result", JSON.stringify(data));
+                        localStorage.setItem("structured_kpis", JSON.stringify(structuredKPIs));
+
+                        runBtn.style.display = "none";
+                        nextBtn.style.display = "inline-block";
+                    }
+                    else {
+                        output.innerHTML = `
+                <div class="error">
+                    Unexpected API response:
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+                        runBtn.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    output.innerHTML = "<div class='error'>Failed to connect to KPI Agent API</div>";
+                    runBtn.disabled = false;
+                });
+        }
+
+        // Navigate to dashboard
+        function goToDashboard() {
+            window.location.href = "/dashboard";
+        }
+
+        /**
+         * ✅ FINAL KPI PARSER
+         * Handles:
+         * - markdown (**)
+         * - bullet points
+         * - extra text
+         */
+        function parseKPIText(text) {
+
+            // 🔥 CLEAN MARKDOWN
+            text = text
+                .replace(/\*\*/g, "")        // remove **
+                .replace(/```/g, "")         // remove code blocks
+                .replace(/- /g, "")          // remove list dashes
+                .trim();
+
+            const kpis = [];
+            const blocks = text.split(/KPI\s*\d+:/i).slice(1);
+
+            blocks.forEach(block => {
+                let name = "";
+                let columns = "";
+                let chartType = "";
+
+                const lines = block.split("\n");
+
+                lines.forEach(line => {
+                    line = line.trim();
+
+                    if (line.toLowerCase().startsWith("name:")) {
+                        name = line.replace(/name:/i, "").trim();
+                    }
+                    else if (line.toLowerCase().startsWith("columns:")) {
+                        columns = line.replace(/columns:/i, "").trim();
+                    }
+                    else if (line.toLowerCase().includes("chart type")) {
+                        chartType = line.replace(/chart type:/i, "").trim();
+                    }
+                });
+
+                if (name && columns && chartType) {
+                    kpis.push({
+                        name: name,
+                        columns: columns,
+                        suggested_chart: chartType
+                    });
+                }
+            });
+
+            return kpis;
+        }
+    </script>
+>>>>>>> a6c88db (Done with All changes and UI)
 
 </body>
+
 </html>

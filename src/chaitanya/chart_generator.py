@@ -358,5 +358,3 @@ def download_dashboard():
 @app.get("/")
 def root():
     return {"status": "Advanced KPI Chart Generator + Dashboard PDF Service Running"}
-
-

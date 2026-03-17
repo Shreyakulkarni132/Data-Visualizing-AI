@@ -7,6 +7,7 @@
   <style>
     /* Page background */
     body {
+<<<<<<< HEAD
       margin: 0;
       font-family: "Segoe UI", system-ui, sans-serif;
       background: linear-gradient(135deg, #f2efff, #e8e4ff);
@@ -15,10 +16,24 @@
       justify-content: center;
       align-items: center;
       padding: 40px;
+=======
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #ffffff;
+      padding: 20px 30px;
+
+      min-height: 100vh; 
+      overflow: hidden;
+
+      /* same soft gradient feel as hero */
+      background:
+        radial-gradient(circle at 30% 30%, #dff7ef 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, #e6dcff 0%, transparent 40%);
+>>>>>>> a6c88db (Done with All changes and UI)
     }
 
     /* Main Panel */
     .panel {
+<<<<<<< HEAD
       background: #ffffff;
       padding: 40px 45px;
       border-radius: 22px;
@@ -28,6 +43,30 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+=======
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      flex: 1;
+      width: fit-content;
+      /* box fits content */
+      max-width: 700px;
+      /* prevents it from becoming too wide */
+      margin-top: 60px;
+      /* margin-left: auto;
+      /* pushes panel slightly from left */
+      /* margin-right: 150px; */ 
+
+      max-height: 70vh;
+      /* prevents panel from becoming too tall */
+      display: flex;
+      flex-direction: column;
+
+      border: 2px solid #8b3dff;
+
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      animation: floatIn 0.6s ease;
+>>>>>>> a6c88db (Done with All changes and UI)
     }
 
     /* Headings */
@@ -39,6 +78,7 @@
     }
 
     .subtitle {
+<<<<<<< HEAD
       font-size: 15px;
       color: #666;
       line-height: 1.6;
@@ -67,6 +107,40 @@
       flex-direction: column;
       gap: 10px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+=======
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    /* ISSUE BOX */
+    .issue {
+      padding: 16px;
+      border: 2px solid transparent;
+      /* base border */
+      border-left: 5px solid #8b3dff;
+
+      background: rgba(139, 61, 255, 0.06);
+      margin-top: 14px;
+      border-radius: 8px;
+
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    }
+
+    /* HOVER EFFECT */
+    .issue:hover {
+      transform: translateY(-5px);
+
+      border: 2px solid #8b3dff;
+      /* purple border */
+
+      box-shadow: 0 14px 30px rgba(139, 61, 255, 0.25);
+    }
+
+    #issues {
+      overflow-y: auto;
+      max-height: 40vh;
+      padding-right: 8px;
+>>>>>>> a6c88db (Done with All changes and UI)
     }
 
     /* Lift only – no color change */
@@ -126,12 +200,17 @@
       color: #b71c1c;
     }
 
+<<<<<<< HEAD
     /* Continue Button */
+=======
+    /* BUTTON */
+>>>>>>> a6c88db (Done with All changes and UI)
     button {
       margin-top: 25px;
       padding: 14px;
       width: 100%;
       cursor: pointer;
+<<<<<<< HEAD
       background: #6a5cff;
       color: #ffffff;
       border: none;
@@ -139,31 +218,181 @@
       font-size: 16px;
       font-weight: 700;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+=======
+      font-size: 16px;
+      background: #8b3dff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+>>>>>>> a6c88db (Done with All changes and UI)
     }
 
     /* No color change on hover */
     button:hover {
       transform: translateY(-3px);
+<<<<<<< HEAD
       box-shadow: 0 8px 24px rgba(106, 92, 255, 0.25);
+=======
+      box-shadow: 0 10px 25px rgba(139, 61, 255, 0.35);
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 18px;
+      color: #444;
+      margin-top: 20px;
+>>>>>>> a6c88db (Done with All changes and UI)
+    }
+
+    /* animation same as hero */
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* LEFT INFO SECTION */
+
+    .info-section {
+      flex: 1;
+      max-width: 480px;
+      /* margin-left: 120px; */
+    }
+
+    /* TITLE */
+
+    .info-section h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #111;
+      margin-bottom: 18px;
+    }
+
+    /* DESCRIPTION TEXT */
+
+    .info-section p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    /* STEPS TITLE */
+
+    .info-section h3 {
+      margin-top: 28px;
+      margin-bottom: 16px;
+      font-size: 22px;
+      color: #222;
+    }
+
+    /* STEP LIST */
+
+    .steps {
+      list-style: none;
+      padding: 0;
+    }
+
+    /* STEP CARD */
+
+    .steps li {
+      background: rgba(139, 61, 255, 0.06);
+      border-left: 5px solid #8b3dff;
+      border-radius: 8px;
+
+      padding: 14px;
+      margin-bottom: 12px;
+
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    /* HOVER EFFECT */
+
+    .steps li:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(139, 61, 255, 0.25);
+    }
+
+    .layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      max-width: 1400px;
+      margin: auto;
+      gap: 80px;
     }
   </style>
 </head>
 
 <body>
 
+<<<<<<< HEAD
   <div class="panel">
     <h1>Data Cleaning Review</h1>
     <div class="subtitle">
       Review AI-recommended data quality improvements. Only the checked actions will be applied.
+=======
+  <div class="layout">
+    <div class="panel">
+      <h2>🔎 Review & Customize Recommended Changes</h2>
+      <div class="subtitle">
+        Each issue is listed separately. Only checked actions will be applied.
+      </div>
+
+      <div id="loading" class="loading">
+        ⏳ Generating data quality review using AI...
+      </div>
+
+      <div id="issues"></div>
+
+      <button onclick="processSelected()">Continue</button>
+>>>>>>> a6c88db (Done with All changes and UI)
     </div>
 
-    <div id="loading" class="loading">
-      ⏳ Generating data quality review using AI...
+    <div class="info-section">
+
+      <h1>Why Data Cleaning is Important for KPIs</h1>
+      <p>
+        Our AI-powered data cleaning review analyzes your dataset and suggests safe
+        improvements so that your KPI calculations are based on trustworthy data. The LLM Review Agent analyzes your dataset and detects potential data quality issues.
+      </p>
+
+      <h3>Steps</h3>
+
+      <ol class="steps">
+
+        <li>
+          <b>Suggested Column Fixes</b><br>
+          The system suggests columns that may need cleaning or formatting.
+        </li>
+
+        <li>
+          <b>Select Changes</b><br>
+          Tick the checkboxes for the cleaning actions you want to apply.
+        </li>
+
+        <li>
+          <b>Continue to KPI Agent</b><br>
+          Click <b>Continue</b> to apply the selected fixes and proceed to the KPI
+          analysis stage.
+        </li>
+      </ol>
+
     </div>
+<<<<<<< HEAD
 
     <div id="issues"></div>
 
     <button onclick="processSelected()">Apply Selected Changes</button>
+=======
+>>>>>>> a6c88db (Done with All changes and UI)
   </div>
 
   <script>

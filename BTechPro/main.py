@@ -24,6 +24,7 @@ app.add_middleware(
 
 # Static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/Images", StaticFiles(directory="Images"), name="Images")
 
 # Include LLM router
 app.include_router(llm_review_router)
