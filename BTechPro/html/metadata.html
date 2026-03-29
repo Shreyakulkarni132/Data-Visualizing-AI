@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <title>Dataset Context</title>
@@ -13,11 +12,8 @@
       background: linear-gradient(135deg, #f2efff, #e8e4ff);
       min-height: 100vh;
       display: flex;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
-      padding-left: 120px;
-      gap: 80px;
-      overflow-x: hidden;
     }
 
     /* Main Card */
@@ -131,12 +127,12 @@
   <button onclick="submitMetadata()">Continue to Review</button>
 </div>
 
-  <script>
-    function submitMetadata() {
-      const description = document.getElementById("datasetDesc").value.trim();
-      const domain = document.getElementById("datasetDomain").value;
+<script>
+function submitMetadata() {
+  const description = document.getElementById("datasetDesc").value.trim();
+  const domain = document.getElementById("datasetDomain").value;
 
-      const datasetId = localStorage.getItem("dataset_id");
+  const datasetId = localStorage.getItem("dataset_id");
 
   const userContext = {
     dataset_id: datasetId,
@@ -144,9 +140,9 @@
     dataset_domain: domain || null
   };
 
-      localStorage.setItem("userDatasetContext", JSON.stringify(userContext));
+  localStorage.setItem("userDatasetContext", JSON.stringify(userContext));
 
-      console.log("📝 Optional dataset context saved:", userContext);
+  console.log("📝 Optional dataset context saved:", userContext);
 
   // Move to next step
   window.location.href = "/review";
@@ -154,5 +150,4 @@
 </script>
 
 </body>
-
 </html>

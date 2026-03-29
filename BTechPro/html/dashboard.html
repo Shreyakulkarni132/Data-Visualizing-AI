@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Auto KPI Dashboard</title>
+<meta charset="UTF-8" />
+<title>Auto KPI Dashboard</title>
 
 <style>
 /* Page background */
@@ -74,47 +73,13 @@ button:hover {
 #downloadBtn {
   display: none;
 }
-    body {
-      font-family: "Segoe UI", system-ui, sans-serif;
-      height: 100vh;
-      margin: 0;
-      overflow-x: hidden;
 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      background:
-        radial-gradient(circle at 30% 30%, #dff7ef 0%, transparent 40%),
-        radial-gradient(circle at 70% 70%, #e6dcff 0%, transparent 40%);
-    }
-
-    /* Title */
-    h2 {
-      margin-top: 20px;
-      font-size: 28px;
-      font-weight: 600;
-    }
-
-    /* Controls */
-    .controls {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    /* Buttons - Purple Theme */
-    button {
-      padding: 12px 26px;
-      font-size: 15px;
-      background: linear-gradient(135deg, #7b2cff, #b388ff);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 8px;
-
-      transition: all 0.3s ease;
-    }
+/* Loader */
+#loader {
+  display: none;
+  text-align: center;
+  margin: 30px 0;
+}
 
 .spinner {
   width: 60px;
@@ -126,10 +91,10 @@ button:hover {
   margin: auto;
 }
 
-    /* Hide download initially */
-    #downloadBtn {
-      display: none;
-    }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /* ==============================
    DASHBOARD GRID (3 PER ROW)
@@ -188,12 +153,12 @@ function runDashboard() {
   const loader = document.getElementById("loader");
   const chartsDiv = document.getElementById("charts");
 
-      generateBtn.style.display = "none";
-      downloadBtn.style.display = "none";
-      loader.style.display = "block";
-      chartsDiv.innerHTML = "";
+  generateBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+  loader.style.display = "block";
+  chartsDiv.innerHTML = "";
 
-      const storedKPIs = localStorage.getItem("structured_kpis");
+  const storedKPIs = localStorage.getItem("structured_kpis");
 
   if (!storedKPIs) {
     alert("No KPIs found. Please run KPI Identification first.");
@@ -204,14 +169,14 @@ function runDashboard() {
 
   const structuredKPIs = JSON.parse(storedKPIs);
 
-      fetch("/chart/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kpis: structuredKPIs })
-      })
-        .then(res => res.json())
-        .then(data => {
-          loader.style.display = "none";
+  fetch("/chart/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kpis: structuredKPIs })
+  })
+  .then(res => res.json())
+  .then(data => {
+    loader.style.display = "none";
 
     if (!data.images || data.images.length === 0) {
       chartsDiv.innerHTML = "<p style='text-align:center;color:#555;'>No charts generated.</p>";
@@ -241,5 +206,4 @@ function downloadPDF() {
 </script>
 
 </body>
-
 </html>
